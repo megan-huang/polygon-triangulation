@@ -5,13 +5,27 @@
     <title>Polygon Triangulation</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script src="triangulation.js" defer></script>
-    <script src="points.js" defer></script>
+    <script src="vis.js" defer></script>
   </head>
   <body>
     <div id="root">
-      <h1>Polygon Triangulation</h1>
-      <p>By Emi Eliason, Megan Huang and Sarah Wu</p>
-      <p>This website visualizes polygon triangulation!</p>
+        <div id="header">
+            <h1>Polygon Triangulation</h1>
+            <h4>By Emi Eliason, Megan Huang and Sarah Wu</h4>
+        </div>
+        <p>This website visualizes polygon triangulation!</p>
+        <div id="buttons">
+          <button>Start Drawing Polygon</button>
+          <button>End Drawing Polygon</button>
+          <button onclick="createNewSVG()">Switch Polygon</button>
+          <button>Start Visualization</button>
+          <button>Step Visualization</button>
+          <button>Tangramify!</button>
+        </div>
+
+        <svg id="canvas" xmlns="http://www.w3.org/2000/svg" width="900" height="500" fill="white" onload="makeDraggable(evt)">
+            <rect width="900" height="500" fill="white" transform="matrix(1, 0, 0, -1, 0, 500)"/>
+        </svg>
     </div>
   </body>
 </html>
