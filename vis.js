@@ -112,7 +112,7 @@ function Triangulation(vertices) {
 
       //check if cross is less than 0
       if (cross(va_to_vb, va_to_vc) > 0) {
-        // console.log("reflex");
+        console.log("reflex");
         continue; //next iteration
       }
 
@@ -321,8 +321,8 @@ function Polygon(pts, id) {
   };
 
   this.triangulate = function () {
-    console.log("got to triangulation");
     let vectors = this.stringToVectors();
+    console.log("got to triangulation with vectors", vectors);
 
     let triArray = Triangulation(vectors);
     let polyArray = [];
@@ -404,12 +404,12 @@ function PresetPolygons() {
     "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150",
     1
   );
-  const square = new Polygon("100,300 300,300 300,100 100,100", 2);
+  // const square = new Polygon("100,300 300,300 300,100 100,100", 2);
   const star = new Polygon(
     "100,300 400,200 550,250 600,20 700,100 750,350 450,400",
     3
   );
-  const polygons = [rabbit, square, star];
+  const polygons = [rabbit, star];
 
   let curr = 0;
 
@@ -437,11 +437,12 @@ function Visualizer(svg) {
 
   this.drawPolygons = function () {
     // let polys = this.polygons[0].triangulate();
-    // console.log("polys", polys);
+    console.log("polys", this.polygons);
 
     for (let i = 0; i < this.polygons.length; i++) {
       const newPolygon = document.createElementNS(SVG_NS, "polygon");
       points = this.polygons[i].pts;
+      console.log("this polygon's points", this.polygons[i]);
       newPolygon.setAttributeNS(null, "points", points);
       newPolygon.classList.add("draggable");
 
@@ -458,14 +459,31 @@ function Visualizer(svg) {
       svg.appendChild(newPolygon);
       this.polygon_elems.push(newPolygon);
 
-      console.log(this.polygons[i].triangulate());
+      // console.log(this.polygons[i].triangulate());
     }
   };
 
   this.triangulate = function () {
+    console.log("getting to inner triangulate", this.polygons);
+    let tris = [];
     for (let i = 0; i < this.polygons.length; i++) {
-      this.polygons[i].triangulate();
+      console.log("hello?");
+      let triangulation = this.polygons[i].triangulate();
+      for (let j = 0; j < triangulation.length; j++) {
+        tris.push(triangulation[j]);
+      }
+      // tris.push(this.polygons[i].triangulate());
+      console.log("inner", tris[i]);
     }
+
+    console.log("tris at the end", tris);
+    this.polygons = [];
+
+    for (let i = 0; i < tris.length; i++) {
+      this.polygons.push(tris[i]);
+    }
+
+    // this.polygons = tris;
   };
 }
 
@@ -498,6 +516,8 @@ let createNewSVG = function () {
   // const vis = new Visualizer(SVG_ELEM);
   // let poly = vis.presets.getNewPolygon();
   vis.changePreset();
+  vis.drawPolygons();
+  vis.triangulate();
   vis.drawPolygons();
 };
 
