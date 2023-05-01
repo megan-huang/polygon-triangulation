@@ -66,37 +66,54 @@ function cross(v1, v2) {
 }
 
 //uses the class Vector
+
+function areaOfTriangle(a, b, c) {
+  let area = Math.abs(0.5 * cross(b.subtract(a), c.subtract(a)));
+  return area;
+}
+
 function pointInTriangle(p, a, b, c) {
-  console.log("pabc", p, a, b, c);
-  let ab = b.subtract(a); //a pointing to b
-  let bc = c.subtract(b); //b pointing to c
-  let ca = a.subtract(c); //c pointing to a
+  let outerTri = areaOfTriangle(a, b, c);
+  let innerTri1 = areaOfTriangle(a, b, p);
+  let innerTri2 = areaOfTriangle(a, c, p);
+  let innerTri3 = areaOfTriangle(b, c, p);
 
-  let ap = p.subtract(a);
-  let bp = p.subtract(b);
-  let cp = p.subtract(c);
+  let sum = innerTri1 + innerTri2 + innerTri3;
 
-  let cross1 = cross(ab, ap);
-  let cross2 = cross(bc, bp);
-  let cross3 = cross(ca, cp);
-
-  //point is not in the triangle
-  if (cross1 > 0 || cross2 > 0 || cross3 > 0) {
-    console.log("returned false with crosses ", cross1, cross2, cross3);
+  if (sum == outerTri) {
+    return true;
+  } else {
     return false;
   }
 
-  return true;
+  // let ab = b.subtract(a); //a pointing to b
+  // let bc = c.subtract(b); //b pointing to c
+  // let ca = a.subtract(c); //c pointing to a
+
+  // let ap = p.subtract(a);
+  // let bp = p.subtract(b);
+  // let cp = p.subtract(c);
+
+  // let cross1 = cross(ab, ap);
+  // let cross2 = cross(bc, bp);
+  // let cross3 = cross(ca, cp);
+
+  // //point is not in the triangle
+  // if (cross1 > 0 || cross2 > 0 || cross3 > 0) {
+  //     return false;
+  // }
+
+  // return true;
 }
 
 //circular array access
 function accessArray(array, index) {
   if (index >= array.length) {
-    return array[index % array.length];
+    return index % array.length;
   } else if (index < 0) {
-    return array[(index % array.length) + array.length];
+    return (index % array.length) + array.length;
   } else {
-    return array[index];
+    return index;
   }
 }
 
@@ -123,71 +140,70 @@ function Triangulation(vertices) {
     indices.push(vertices[i]); //populate indices with vertices
   }
 
-  console.log("vertices", vertices);
-  console.log("indices", indices);
-
   let totalTriCount = vertices.length - 2;
 
-  let totalTriIndexCount = totalTriCount * 3;
+  let totalTriIndexCount = totalTriCount * 3; //length
 
-  // length is totalTriIndexCount?
   let triangles = []; //integer array
 
   let curIndex = 0;
   while (indices.length > 3) {
     //continue checking for ears
-    for (let i = 0; i < indices.length; i++) {
+    for (i = 0; i < indices.length; i++) {
       //get cur, prev, next
-      let a = indices[i];
+      let a = i;
       let b = accessArray(indices, i - 1);
       let c = accessArray(indices, i + 1);
 
-      //   console.log("a, b, c: ", a, b, c);
-      console.log("i: ", i);
-
       //if cross product of ab and ac is positive, interior angle is convex
       //check if angle is convex (is ear)
-      let va = vertices[i];
-      let vb = accessArray(vertices, i - 1);
-      let vc = accessArray(vertices, i + 1);
-
-      //   console.log("va, vb, vc: ", va, vb, vc);
+      let va = indices[a];
+      let vb = indices[b];
+      let vc = indices[c];
 
       let va_to_vb = vb.subtract(va);
       let va_to_vc = vc.subtract(va);
 
       //check if cross is less than 0
-      if (cross(va_to_vb, va_to_vc) < 0) {
-        console.log("cross");
+      if (cross(va_to_vb, va_to_vc) > 0) {
+        console.log("reflex");
         continue; //next iteration
       }
 
+      // console.log("va", va);
+      // console.log("vb", va_to_vb);
+      // console.log("vc", va_to_vc);
+
       isEar = true; //boolean
 
-      for (j = 0; j < vertices.length; j++) {
-        // console.log("got to j loop");
+      for (j = 0; j < indices.length; j++) {
+        let va = indices[a];
+        let vb = indices[b];
+        let vc = indices[c];
+
         if (j == a || j == b || j == c) {
-          console.log("continued");
+          console.log(j, a, b, c);
           continue;
         }
-        p = vertices[j]; //vector p
+        p = indices[j]; //vector p
 
         if (pointInTriangle(p, vb, va, vc)) {
+          //if inside the triangle, NOT an ear
+          // console.log("inside");
+          console.log("PIT", vb, va, vc, p);
           isEar = false;
           break;
         }
       }
 
-      console.log("is ear is", isEar);
+      console.log(isEar);
+      // console.log(va,vb,vc);
 
       //adding triangle vertices
       if (isEar) {
-        console.log("got to isear");
-        triangles[curIndex++] = b; //prev
-        triangles[curIndex++] = a; //cur
-        triangles[curIndex++] = c; //next
-
-        indices.remove(i); //remove found ears
+        let tri = new Triangle(va, vb, vc);
+        triangles[curIndex++] = tri;
+        indices.splice(a, 1); //remove found ears
         break;
       }
     }
@@ -198,15 +214,29 @@ function Triangulation(vertices) {
   triangles[curIndex++] = indices[1];
   triangles[curIndex++] = indices[2];
 
-  console.log("triangles:", triangles);
-  console.log("indices:", indices);
+  //   console.log(triangles);
+
+  for (let i = 0; i < triangles.length; i++) {
+    console.log(triangles[i]);
+  }
+}
+
+class Triangle {
+  constructor(tri1, tri2, tri3) {
+    this.array = [tri1, tri2, tri3];
+  }
+
+  toString() {
+    return "{" + this.array[0] + this.array[1] + this.array[2] + "}";
+  }
 }
 
 //implementation of needed vector operations
 class Vector {
-  constructor(x, y) {
+  constructor(x, y, id) {
     this.x = x;
     this.y = y;
+    this.id = id;
   }
 
   add(other) {
@@ -226,13 +256,26 @@ class Vector {
   }
 }
 
-let a = new Vector(100, 300);
-let b = new Vector(400, 200);
-let c = new Vector(550, 250);
-let d = new Vector(600, 20);
-let e = new Vector(700, 100);
-let f = new Vector(750, 350);
-let g = new Vector(450, 400);
-let testVertices = [g, f, e, d, c, b, a];
+// let a = new Vector(0, 0, 0);
+// let b = new Vector(3, 1, 1);
+// let c = new Vector(6, 0, 2);
+// let d = new Vector(5, 2, 3);
+// let e = new Vector(1, 3, 4);
+
+let a = new Vector(100, 300, 0);
+let b = new Vector(400, 200, 1);
+let c = new Vector(550, 250, 2);
+let d = new Vector(600, 20, 3);
+let e = new Vector(700, 100, 4);
+let f = new Vector(750, 350, 5);
+let g = new Vector(450, 400, 6);
+let testVertices = [a, b, c, d, e, f, g];
 
 Triangulation(testVertices);
+
+// let p = new Vector(10,10);
+// let a1 = new Vector(0, 4);
+// let b1 = new Vector(5, 0);
+// let c1 = new Vector(0, 0);
+
+// console.log(pointInTriangle(p, a1, b1, c1));
