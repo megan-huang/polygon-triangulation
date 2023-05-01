@@ -517,9 +517,14 @@ let createNewSVG = function () {
   // let poly = vis.presets.getNewPolygon();
   vis.changePreset();
   vis.drawPolygons();
+  // vis.triangulate();
+  // vis.drawPolygons();
+};
+
+function visualizeTriangulation() {
   vis.triangulate();
   vis.drawPolygons();
-};
+}
 
 // const vis = new Visualizer(SVG_ELEM);
 // const polygon = new Polygon(
