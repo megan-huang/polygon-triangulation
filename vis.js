@@ -1,6 +1,6 @@
-const SVG_NS = "http://www.w3.org/2000/svg";
-const ROOT_ELEM = document.querySelector("#root");
-let SVG_ELEM = document.querySelector("#canvas");
+const SVG_NS = "http://www.w3.org/2000/svg"; // SVG namespace
+const ROOT_ELEM = document.querySelector("#root"); // Root element
+let SVG_ELEM = document.querySelector("#canvas"); // SVG element
 
 /**
  * TODO:
@@ -25,25 +25,25 @@ function Point(x, y, id) {
   // sorting a collection of points. The comparison is according to
   // lexicographical ordering. That is, (x, y) < (x', y') if (1) x <
   // x' or (2) x == x' and y < y'.
-  this.compareTo = function (p) {
-    if (this.x > p.x) {
-      return 1;
-    }
+  // this.compareTo = function (p) {
+  //   if (this.x > p.x) {
+  //     return 1;
+  //   }
 
-    if (this.x < p.x) {
-      return -1;
-    }
+  //   if (this.x < p.x) {
+  //     return -1;
+  //   }
 
-    if (this.y > p.y) {
-      return 1;
-    }
+  //   if (this.y > p.y) {
+  //     return 1;
+  //   }
 
-    if (this.y < p.y) {
-      return -1;
-    }
+  //   if (this.y < p.y) {
+  //     return -1;
+  //   }
 
-    return 0;
-  };
+  //   return 0;
+  // };
 
   // return a string representation of this Point
   this.toString = function () {
@@ -64,20 +64,23 @@ function makeDraggable(evt) {
   var dragTarget = null;
   var offset = null;
 
+  // Add event listeners for mouse interactions
   svg.addEventListener("mousedown", startDrag);
   svg.addEventListener("mousemove", drag);
   svg.addEventListener("mouseup", endDrag);
   svg.addEventListener("mouseleave", endDrag);
 
   function startDrag(evt) {
+    // If the target SVG is draggable
     if (evt.target.classList.contains("draggable")) {
       dragTarget = evt.target;
       console.log("started");
 
+      // Get the current mouse position and current transforms
       offset = getMousePosition(evt);
-
       var transforms = dragTarget.transform.baseVal;
 
+      //
       if (
         transforms.length === 0 ||
         transforms.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
@@ -127,6 +130,7 @@ function Visualizer(svg) {
     const hue = Math.floor(Math.random() * 255);
     newPolygon.setAttributeNS(null, "fill", "hsl(" + hue + ", 100%, 85%)");
     newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
+    newPolygon.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
 
     // makeDraggable(svg);
     svg.appendChild(newPolygon);
@@ -169,7 +173,7 @@ let createNewSVG = function () {
   rect.setAttributeNS(null, "width", "900");
   rect.setAttributeNS(null, "height", "500");
   rect.setAttributeNS(null, "fill", "white");
-  rect.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
+  // rect.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
 
   newSVG.appendChild(rect);
   ROOT_ELEM.removeChild(SVG_ELEM);
