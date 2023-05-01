@@ -2,6 +2,258 @@ const SVG_NS = "http://www.w3.org/2000/svg"; // SVG namespace
 const ROOT_ELEM = document.querySelector("#root"); // Root element
 let SVG_ELEM = document.querySelector("#canvas"); // SVG element
 
+//start of code for ear clipping
+
+//useful functions
+
+//cross product
+function cross(v1, v2) {
+  return v1.x * v2.y - v1.y * v2.x;
+}
+
+//uses the class Vector
+
+function areaOfTriangle(a, b, c) {
+  let area = Math.abs(0.5 * cross(b.subtract(a), c.subtract(a)));
+  return area;
+}
+
+function pointInTriangle(p, a, b, c) {
+  let outerTri = areaOfTriangle(a, b, c);
+  let innerTri1 = areaOfTriangle(a, b, p);
+  let innerTri2 = areaOfTriangle(a, c, p);
+  let innerTri3 = areaOfTriangle(b, c, p);
+
+  let sum = innerTri1 + innerTri2 + innerTri3;
+
+  if (sum == outerTri) {
+    return true;
+  } else {
+    return false;
+  }
+
+  // let ab = b.subtract(a); //a pointing to b
+  // let bc = c.subtract(b); //b pointing to c
+  // let ca = a.subtract(c); //c pointing to a
+
+  // let ap = p.subtract(a);
+  // let bp = p.subtract(b);
+  // let cp = p.subtract(c);
+
+  // let cross1 = cross(ab, ap);
+  // let cross2 = cross(bc, bp);
+  // let cross3 = cross(ca, cp);
+
+  // //point is not in the triangle
+  // if (cross1 > 0 || cross2 > 0 || cross3 > 0) {
+  //     return false;
+  // }
+
+  // return true;
+}
+
+//circular array access
+function accessArray(array, index) {
+  if (index >= array.length) {
+    return index % array.length;
+  } else if (index < 0) {
+    return (index % array.length) + array.length;
+  } else {
+    return index;
+  }
+}
+
+//in: array for vertices (Vectors)
+//optionally, could make it return boolean
+//creates array for triangles (ints)
+//the array vertices must contain instances of the Vector class!
+//takes in a simple polygon
+//reference: https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf and https://www.youtube.com/watch?v=QAdfkylpYwc
+function Triangulation(vertices) {
+  //error
+  if (vertices.length < 3) {
+    console.log("Needs at least 3 vertices.");
+  }
+  if (vertices.length == null) {
+    console.log("Vertex list is null.");
+  }
+
+  // let triangles = []; //output triangles
+
+  let indices = [];
+
+  for (i = 0; i < vertices.length; i++) {
+    indices.push(vertices[i]); //populate indices with vertices
+  }
+
+  let totalTriCount = vertices.length - 2;
+
+  let totalTriIndexCount = totalTriCount * 3; //length
+
+  let triangles = []; //integer array
+
+  let curIndex = 0;
+  while (indices.length > 3) {
+    //continue checking for ears
+    for (i = 0; i < indices.length; i++) {
+      //get cur, prev, next
+      let a = i;
+      let b = accessArray(indices, i - 1);
+      let c = accessArray(indices, i + 1);
+
+      //if cross product of ab and ac is positive, interior angle is convex
+      //check if angle is convex (is ear)
+      let va = indices[a];
+      let vb = indices[b];
+      let vc = indices[c];
+
+      let va_to_vb = vb.subtract(va);
+      let va_to_vc = vc.subtract(va);
+
+      //check if cross is less than 0
+      if (cross(va_to_vb, va_to_vc) > 0) {
+        // console.log("reflex");
+        continue; //next iteration
+      }
+
+      // console.log("va", va);
+      // console.log("vb", va_to_vb);
+      // console.log("vc", va_to_vc);
+
+      isEar = true; //boolean
+
+      for (j = 0; j < indices.length; j++) {
+        let va = indices[a];
+        let vb = indices[b];
+        let vc = indices[c];
+
+        if (j == a || j == b || j == c) {
+          console.log(j, a, b, c);
+          continue;
+        }
+        p = indices[j]; //vector p
+
+        if (pointInTriangle(p, vb, va, vc)) {
+          //if inside the triangle, NOT an ear
+          // console.log("inside");
+          console.log("PIT", vb, va, vc, p);
+          isEar = false;
+          break;
+        }
+      }
+
+      console.log(isEar);
+      // console.log(va,vb,vc);
+
+      //adding triangle vertices
+      if (isEar) {
+        let tri = new Triangle(va, vb, vc);
+        triangles[curIndex++] = tri;
+        indices.splice(a, 1); //remove found ears
+        break;
+      }
+    }
+  }
+
+  //adding last three vertices (last triangle left)
+  let tri = new Triangle(indices[0], indices[1], indices[2]);
+  triangles[curIndex++] = tri;
+
+  //   console.log(triangles);
+
+  for (let i = 0; i < triangles.length; i++) {
+    console.log(triangles[i]);
+  }
+
+  return triangles;
+}
+
+class Triangle {
+  constructor(tri1, tri2, tri3) {
+    this.array = [tri1, tri2, tri3];
+  }
+
+  makePolygon(id) {
+    let str = "";
+
+    for (let i = 0; i < this.array.length; i++) {
+      str = str + this.array[i].x + "," + this.array[i].y + " ";
+    }
+
+    console.log("make polygon str", str);
+
+    let newPolygon = new Polygon(str, id);
+    return newPolygon;
+  }
+
+  toString() {
+    return "{" + this.array[0] + this.array[1] + this.array[2] + "}";
+  }
+}
+
+//implementation of needed vector operations
+class Vector {
+  constructor(x, y, id) {
+    this.x = x;
+    this.y = y;
+    this.id = id;
+  }
+
+  add(other) {
+    return new Vector(this.x + other.x, this.y + other.y);
+  }
+
+  subtract(other) {
+    return new Vector(this.x - other.x, this.y - other.y);
+  }
+
+  // multiply(scalar) {
+  //     return new Vector2(this.x * scalar, this.y * scalar);
+  // }
+
+  cross(other) {
+    return this.x * other.y - this.y * other.x;
+  }
+}
+
+// let a = new Vector(0, 0, 0);
+// let b = new Vector(3, 1, 1);
+// let c = new Vector(6, 0, 2);
+// let d = new Vector(5, 2, 3);
+// let e = new Vector(1, 3, 4);
+
+let a = new Vector(100, 300, 0);
+let b = new Vector(400, 200, 1);
+let c = new Vector(550, 250, 2);
+let d = new Vector(600, 20, 3);
+let e = new Vector(700, 100, 4);
+let f = new Vector(750, 350, 5);
+let g = new Vector(450, 400, 6);
+let testVertices = [a, b, c, d, e, f, g];
+
+function vectorsToString(vertices) {
+  let str = "";
+  for (let i = 0; i < vertices.length; i++) {
+    let x = vertices[i].x;
+    let y = vertices[i].y;
+    let id = vertices[i].id;
+
+    str = str + x + "," + y + " ";
+  }
+  return str;
+}
+
+// vectorsToString(testVertices);
+
+// Triangulation(testVertices);
+
+// let p = new Vector(10,10);
+// let a1 = new Vector(0, 4);
+// let b1 = new Vector(5, 0);
+// let c1 = new Vector(0, 0);
+
+// console.log(pointInTriangle(p, a1, b1, c1));
+
 /**
  * TODO:
  * - Fix draggable capability for newly created polygons
@@ -52,8 +304,37 @@ function Point(x, y, id) {
 }
 
 function Polygon(pts, id) {
-  this.pts = pts;
+  this.pts = pts; // String representation of points
   this.id = id;
+
+  this.stringToVectors = function () {
+    let arr = pts.split(" ");
+    let vectors = [];
+
+    for (let i = 0; i < arr.length; i++) {
+      let coords = arr[i].split(",");
+      let vec = new Vector(coords[0], coords[1], i);
+      vectors.push(vec);
+    }
+
+    return vectors;
+  };
+
+  this.triangulate = function () {
+    console.log("got to triangulation");
+    let vectors = this.stringToVectors();
+
+    let triArray = Triangulation(vectors);
+    let polyArray = [];
+
+    console.log("triarray", triArray);
+
+    for (let i = 0; i < triArray.length; i++) {
+      polyArray.push(triArray[i].makePolygon(i));
+    }
+
+    return polyArray;
+  };
 }
 
 function makeDraggable(evt) {
@@ -118,33 +399,14 @@ function makeDraggable(evt) {
   }
 }
 
-function Visualizer(svg) {
-  this.svg = svg;
-
-  this.drawPolygon = function (pgn) {
-    const newPolygon = document.createElementNS(SVG_NS, "polygon");
-    points = pgn.pts;
-    newPolygon.setAttributeNS(null, "points", points);
-    newPolygon.classList.add("draggable");
-
-    const hue = Math.floor(Math.random() * 255);
-    newPolygon.setAttributeNS(null, "fill", "hsl(" + hue + ", 100%, 85%)");
-    newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
-    newPolygon.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
-
-    // makeDraggable(svg);
-    svg.appendChild(newPolygon);
-  };
-}
-
 function PresetPolygons() {
   const rabbit = new Polygon(
-    "100,150 150,50, 200,150, 200,200, 350,200, 450,120, 450,200, 400,300, 400,400, 350,350, 350,300, 200,300, 250,250, 100,150",
+    "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150",
     1
   );
-  const square = new Polygon("100,300 300,300, 300,100 100,100", 2);
+  const square = new Polygon("100,300 300,300 300,100 100,100", 2);
   const star = new Polygon(
-    "100,300, 400,200 550,250 600,20 700,100 750,350, 450,400",
+    "100,300 400,200 550,250 600,20 700,100 750,350 450,400",
     3
   );
   const polygons = [rabbit, square, star];
@@ -153,44 +415,99 @@ function PresetPolygons() {
 
   this.getNewPolygon = function () {
     curr = (curr + 1) % polygons.length;
-    console.log(curr);
+    console.log(curr, "polygon length", polygons.length);
     return polygons[curr];
   };
 }
 
-const presets = new PresetPolygons();
+function Visualizer(svg) {
+  this.svg = svg;
+  this.polygons = [];
+  this.polygon_elems = [];
+  this.presets = new PresetPolygons();
 
-// Create a new clear SVG canvas.
-let createNewSVG = function () {
-  let newSVG = document.createElementNS(SVG_NS, "svg");
-  newSVG.setAttributeNS(null, "id", "canvas");
-  newSVG.setAttributeNS(null, "width", "900");
-  newSVG.setAttributeNS(null, "height", "500");
-  newSVG.setAttributeNS(null, "fill", "white");
-  newSVG.setAttributeNS(null, "onload", "makeDraggable(evt)");
+  this.addPolygon = function (pgn) {
+    this.polygons.push(pgn);
+  };
 
-  let rect = document.createElementNS(SVG_NS, "rect");
-  rect.setAttributeNS(null, "width", "900");
-  rect.setAttributeNS(null, "height", "500");
-  rect.setAttributeNS(null, "fill", "white");
-  // rect.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
+  this.changePreset = function () {
+    this.polygons = [this.presets.getNewPolygon()];
+    console.log(this.polygons);
+  };
 
-  newSVG.appendChild(rect);
-  ROOT_ELEM.removeChild(SVG_ELEM);
-  SVG_ELEM = newSVG;
-  ROOT_ELEM.appendChild(SVG_ELEM);
+  this.drawPolygons = function () {
+    // let polys = this.polygons[0].triangulate();
+    // console.log("polys", polys);
 
-  const vis = new Visualizer(SVG_ELEM);
-  const polygon = presets.getNewPolygon();
-  vis.drawPolygon(polygon);
-};
+    for (let i = 0; i < this.polygons.length; i++) {
+      const newPolygon = document.createElementNS(SVG_NS, "polygon");
+      points = this.polygons[i].pts;
+      newPolygon.setAttributeNS(null, "points", points);
+      newPolygon.classList.add("draggable");
+
+      const hue = Math.floor(Math.random() * 255);
+      newPolygon.setAttributeNS(null, "fill", "hsl(" + hue + ", 100%, 85%)");
+      newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
+      newPolygon.setAttributeNS(
+        null,
+        "transform",
+        "matrix(1, 0, 0, -1, 0, 500)"
+      );
+
+      // makeDraggable(svg);
+      svg.appendChild(newPolygon);
+      this.polygon_elems.push(newPolygon);
+
+      console.log(this.polygons[i].triangulate());
+    }
+  };
+
+  this.triangulate = function () {
+    for (let i = 0; i < this.polygons.length; i++) {
+      this.polygons[i].triangulate();
+    }
+  };
+}
 
 const vis = new Visualizer(SVG_ELEM);
 const polygon = new Polygon(
   "100,300, 400,200 550,250 600,20 700,100 750,350, 450,400",
   1
 );
-vis.drawPolygon(polygon);
+vis.addPolygon(polygon);
+vis.drawPolygons();
+
+// Create a new clear SVG canvas.
+let createNewSVG = function () {
+  SVG_ELEM.innerHTML = "";
+  // let newSVG = document.createElementNS(SVG_NS, "svg");
+  // newSVG.setAttributeNS(null, "id", "canvas");
+  // newSVG.setAttributeNS(null, "width", "900");
+  // newSVG.setAttributeNS(null, "height", "500");
+  // newSVG.setAttributeNS(null, "fill", "white");
+  // newSVG.setAttributeNS(null, "onload", "makeDraggable(evt)");
+  // let rect = document.createElementNS(SVG_NS, "rect");
+  // rect.setAttributeNS(null, "width", "900");
+  // rect.setAttributeNS(null, "height", "500");
+  // rect.setAttributeNS(null, "fill", "white");
+  // // rect.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
+  // newSVG.appendChild(rect);
+  // ROOT_ELEM.removeChild(SVG_ELEM);
+  // SVG_ELEM = newSVG;
+  // ROOT_ELEM.appendChild(SVG_ELEM);
+  // const vis = new Visualizer(SVG_ELEM);
+  // let poly = vis.presets.getNewPolygon();
+  vis.changePreset();
+  vis.drawPolygons();
+};
+
+// const vis = new Visualizer(SVG_ELEM);
+// const polygon = new Polygon(
+//   "100,300, 400,200 550,250 600,20 700,100 750,350, 450,400",
+//   1
+// );
+// vis.addPolygon(polygon);
+// vis.drawPolygons();
 
 /**
  *
@@ -268,4 +585,70 @@ vis.drawPolygon(polygon);
 
 //     return str;
 //   };
+// }
+
+/**
+ *
+ *
+ * TRIANGULATION.JS
+ *
+ *
+ */
+
+//visualization and properties
+
+//construction of DCEL (doubly connected edge list)
+
+//add diagonal
+
+//algorithm
+
+// function FastTriangulation(polygon) {
+
+//     //part 1: partitioning into y-monotone polygons using plane sweep method
+//     //getting rid of turn vertices (merge and split vertices) by adding diagonals
+
+//     //part 2: triangulation of monotone parts (greedy)
+//     //single pass from top to bottom, invariants: top vertex convex
+//     //input: y-monotone polygon (monotoneP) stored in a doubly connected edge list
+//     //output: triangulation of monotoneP soted in a doubly-connected edge list D
+//     function triangulateMontone(monotoneP) {
+//         this.monotoneP.sort(); //need a method that sorts the points into one sequence by decreasing y-coordinate (choose left point to break ties)
+
+//         let stack = []; //empty stack (for not yet triangulated vertices)
+
+//         stack.push(monotoneP[0]);
+//         stack.push(monotoneP[1]);
+
+//         for (j = 2; j = monotoneP.size - 1; j++) {
+//             //need method to check is point is on right or left chain
+//             //if on different chains
+//             if (monotoneP[j].isRight && stack[0].isLeft || monotone[j].isLeft && stack[0].isRight) {
+//                 while (!stack.isEmpty) {
+
+//                     if (stack.size == 1) {
+//                         break;
+//                     }
+//                     monotoneP.addDiagonal(stack.pop(), monotoneP[j]); //need method for adding diagonals
+//                 }
+//                 stack.push(monotoneP[j - 1]);
+//                 stack.push(monotoneP[j]);
+
+//             } else {
+//                 stack.pop();
+
+//                 //to do:
+//                 //pop vertices in stack as long as diagonals from uj to them are inside the polygon
+//                 //insert these diagonals into doubly linked list
+//                 //push the last vertex that has been popped back onto S
+//                 //----------------------------------
+
+//                 stack.push(monotoneP[j]);
+//             }
+//         }
+//         //to do:
+//         //add diagonals from monotone[j] to all stack vertices except the first and last one
+//         //---------------
+//     }
+
 // }

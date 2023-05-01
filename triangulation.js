@@ -279,3 +279,34 @@ Triangulation(testVertices);
 // let c1 = new Vector(0, 0);
 
 // console.log(pointInTriangle(p, a1, b1, c1));
+
+function vectorsToString(vertices) {
+  let str = "";
+  for (let i = 0; i < vertices.length; i++) {
+    let x = vertices[i].x;
+    let y = vertices[i].y;
+    let id = vertices[i].id;
+
+    str = str + x + "," + y + " ";
+  }
+  return str;
+}
+
+console.log(vectorsToString(testVertices));
+
+function stringToVectors(str) {
+  let arr = str.split(" ");
+  let vectors = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    let coords = arr[i].split(",");
+    let vec = new Vector(coords[0], coords[1], i);
+    vectors.push(vec);
+  }
+
+  return vectors;
+}
+
+console.log(
+  stringToVectors("100,300 400,200 550,250 600,20 700,100 750,350 450,400")
+);
