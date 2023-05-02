@@ -426,6 +426,7 @@ function Visualizer(svg) {
   this.polygon_elems = [];
   this.presets = new PresetPolygons();
 
+  // adds polygon onto an array
   this.addPolygon = function (pgn) {
     this.polygons.push(pgn);
   };
@@ -440,6 +441,8 @@ function Visualizer(svg) {
     console.log("polys", this.polygons);
 
     for (let i = 0; i < this.polygons.length; i++) {
+
+      // making a new polygon
       const newPolygon = document.createElementNS(SVG_NS, "polygon");
       points = this.polygons[i].pts;
       console.log("this polygon's points", this.polygons[i]);
@@ -449,11 +452,16 @@ function Visualizer(svg) {
       const hue = Math.floor(Math.random() * 255);
       newPolygon.setAttributeNS(null, "fill", "hsl(" + hue + ", 100%, 85%)");
       newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
-      newPolygon.setAttributeNS(
-        null,
-        "transform",
-        "matrix(1, 0, 0, -1, 0, 500)"
-      );
+      newPolygon.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
+
+
+      // making vectors into circles
+      // const newVector = document.createElementsNS(SVG_NS, "circle");
+      // newVector.setAttributeNS(null, "cx", points.x);
+      // newPolygon.setAttributeNS(null, "fill", "white");
+      // newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
+      // newPolygon.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
+
 
       // makeDraggable(svg);
       svg.appendChild(newPolygon);
