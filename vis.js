@@ -258,10 +258,15 @@ function vectorsToString(vertices) {
  * TODO:
  * - Fix draggable capability for newly created polygons
  * - "Scatter" method
+ * - Change background to a "guide" shape
  * - Convert array of points to "polygon" points string
  * - Expand SVG to whole screen
  * - Draw own polygon
- *
+ * - Make polygons of width 0 not there
+ * - Fix why it doesn't work for square?
+ * - Animate step by step
+ * - Rotation
+ * - Don't make polygons draggable until triangulated
  */
 
 // An object that represents a 2-d point, consisting of an
