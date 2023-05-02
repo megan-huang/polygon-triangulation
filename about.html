@@ -1,3 +1,82 @@
-<!-- description of motivation and usage
-references to external material
-technical development and description of major algorithmic componenets -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Page on motivations, references, and technical development.">
+    <title>About</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+
+<body>
+    <div id="header">
+        <h1>Information</h1>
+    </div>
+    <h2>Motivation</h2>
+    <p>
+        Polygon triangulation is the partitioning of a polygon into a set of triangles (meeting edge-to-edge).
+        These simpler shapes are useful in general, as operating on triangles proves much easier than working on the
+        entire polygon.
+        The broader topic of triangulation in geometry is well studied.
+        <br>
+        For further research, the art gallery guarding problem, posed by Victor Klee in 1973,
+        is a popular visibility problem in computational geometry that uses polygon triangulation in a solution by
+        Fisk.
+    </p>
+    <p>
+        <strong>Theorem 3.1</strong>
+        <em>Every simple polygon admits a triangulation, and any triangulation of a simple polygon with n vertices
+            consists of exactly n-2 triangles.</em>
+        (de Berg 47)
+    </p>
+    <hr>
+
+    <h2>Ear Clipping Method</h2>
+    <p>
+        Our chosen method for polygon triangulation is the ear clipping method. Max Dehn (though often attributed to
+        Meisters) proved the two ears theorem,
+        which states that every simple polygon with more than three vertices has at least two ears.
+        These ears, vertices, may be removed from the polygon without causing crossing. The resulting polygon
+        likewise satisfies this condition.
+        The algorithm finds and chops ears off, continuing until one triangle remains. This algorithm does not work for
+        polygons with holes.
+    </p>
+    <hr>
+
+    <h2>Development</h2>
+    <p>
+        We originally hoped to implement the fastest feasible algorithm for polygon triangulation, which involves first
+        dividing the polygon into y-monotone subpolygons and then triangulating those monotone polygons.
+        This algorithm proved too complicated to comfortably implement, so we decided to use the slower ear clipping
+        method for the project.
+        You may view some of the unused code for fast triangulation within the javascript files.
+        After shifting focus to ear clipping, some of the challenges encountered in the development can be 
+        attributed to the JavaScript language, for example the lack of a vector object, how it is an untyped language, and difficulties debugging. 
+    </p>
+    <p>
+        We wanted a step-by-step demonstration of the process on different examples. 
+        <br>
+        In terms of user interaction, 
+        we hoped that users would be able to play with and enjoy the shapes that resulted from the algorithm. 
+        For us, tangrams were a natural connection from triangulation. 
+    </p>
+    <hr>
+
+    <h2>References</h2>
+    <p>
+        Resources referenced:
+    </p>
+    <ul>
+        <li>Mark de Berg's Computational Geometry: Algorithms and Applications (2008)</li>
+        <li><a href="https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf">Triangulation by
+                Ear Clipping (David Eberly)</a>
+        </li>
+        <li><a href="https://www.youtube.com/watch?v=QAdfkylpYwc">Polygon Triangulation - Overview of Ear Clipping</a>
+        </li>
+    </ul>
+
+    <hr>
+
+</body>
+
+</html>
