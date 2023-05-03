@@ -36,3 +36,8 @@ body {
     fill: white;
     stroke-width: 4;
 }
+
+.line {
+    stroke: black;
+    stroke-width: 2;
+}
