@@ -208,7 +208,7 @@ class Point {
 class Polygon {
     constructor(arrPoints, id){
 
-        //pts: string representation of points
+        //arrPoints: array representation of points
         //id: id of polygon for user (visualization/HTML) to switch between polygons
 
         this.arrPoints = arrPoints;
@@ -296,24 +296,25 @@ function makeDraggable(evt) {
   }
 }
 
-function PresetPolygons() {
-    let strRabbit = "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
-    const rabbit = new Polygon(stringToPoint(strRabbit), 1);
-  
-    // const square = new Polygon("100,300 300,300 300,100 100,100", 2);
+function Animation(svg, polygons) {
+  this.svg = svg;
+  this.polygons = polygons;
 
-    let strStar = "100,300 400,200 550,250 600,20 700,100 750,350 450,400";
-    const star = new Polygon(stringToPoint(strStar), 3);
+  //adding in all the vectors as svgs
+  for (let j = 0; j < this.polygons[i].arrPoints.length; j++) {
+    let point = this.polygons[i].arrPoints[j];
+    
+    const newCircle = document.createElementNS(SVG_NS, "circle");
+    newCircle.setAttributeNS(null, "cx", point.x);
+    newCircle.setAttributeNS(null, "cy", point.y);
+    newCircle.setAttributeNS(null, "fill", "white");
+    newCircle.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
 
-  const polygons = [rabbit, star];
+    newCircle.classList.add("vertex");
+    svg.appendChild(newCircle);
+  }
 
-  let curr = 0;
 
-  this.getNewPolygon = function () {
-    curr = (curr + 1) % polygons.length;
-    console.log(curr, "polygon length", polygons.length);
-    return polygons[curr];
-  };
 }
 
 function Visualizer(svg) {
@@ -349,16 +350,6 @@ function Visualizer(svg) {
       newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
       newPolygon.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
 
-
-      // making vectors into circles
-      // const newVector = document.createElementsNS(SVG_NS, "circle");
-      // newVector.setAttributeNS(null, "cx", points.x);
-      // newPolygon.setAttributeNS(null, "fill", "white");
-      // newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
-      // newPolygon.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
-
-
-      // makeDraggable(svg);
       svg.appendChild(newPolygon);
       this.polygon_elems.push(newPolygon);
 
@@ -422,11 +413,30 @@ let createNewSVG = function () {
   SVG_ELEM.innerHTML = "";
   vis.changePreset();
   vis.drawPolygons();
-  // vis.triangulate();
-  // vis.drawPolygons();
 };
 
 function visualizeTriangulation() {
   vis.triangulate();
   vis.drawPolygons();
+}
+
+function PresetPolygons() {
+  const strRabbit = "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
+  const rabbit = new Polygon(stringToPoint(strRabbit), 1);
+
+  // const square = new Polygon("100,300 300,300 300,100 100,100", 2);
+
+  const strStar = "100,300 400,200 550,250 600,20 700,100 750,350 450,400";
+  const star = new Polygon(stringToPoint(strStar), 2);
+
+  const arrPresets = [rabbit, star];
+
+  let curr = 0;
+
+  this.getNewPolygon = function () {
+    curr = (curr + 1) % arrPresets.length;
+    console.log(curr, "polygon length", arrPresets.length);
+    console.log(arrPresets[curr]);
+    return arrPresets[curr];
+  };
 }

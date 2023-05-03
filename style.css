@@ -29,3 +29,10 @@ body {
 .draggable {
     cursor: move;
 }
+
+.vertex {
+    r: 10px;
+    stroke: black;
+    fill: white;
+    stroke-width: 4;
+}
