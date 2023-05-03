@@ -4,6 +4,8 @@ let SVG_ELEM = document.querySelector("#canvas"); // SVG element
 
 //start of code for ear clipping
 
+// TODO: Fix to only triangulate once
+
 //useful functions
 
 //cross product
@@ -18,12 +20,10 @@ function areaOfTriangle(a, b, c) {
   return area;
 }
 
-
 //calculates if p is inside the triangle formed by a, b, c
 //area of OUTER_TRIANGLE (a,b,c) and the area of INNER_TRIANGLES (a,b,p) && (a,c,p) && (b,c,p)
 //if the area of OUTER_TRIANGLE is the same area of the INNER_TRIANGLES, then p is inside
 function pointInTriangle(p, a, b, c) {
-
   //calculating areas of triangles
   let outerTri = areaOfTriangle(a, b, c);
   let innerTri1 = areaOfTriangle(a, b, p);
@@ -69,10 +69,9 @@ function Triangulation(vertices, idTri) {
   let triangles = []; //storing the triangle ears
 
   //GOAL: checking the vertices and seeing if an ear can be created out of the prev, curr, and next vertex.
-  //two conditions must be passed. 
-  //1) the curr vertex must be a convex angle. 
+  //two conditions must be passed.
+  //1) the curr vertex must be a convex angle.
   //2) the other vertices of the polygon CANNOT be inside the triangle created by prev, curr, and next vertices
-
 
   //iterating through the list of vertices.
   let curIndex = 0;
@@ -108,14 +107,13 @@ function Triangulation(vertices, idTri) {
 
       //checking through other vertices in polygon
       for (j = 0; j < vertices.length; j++) {
-
         //other vertices MUST be different from prev, curr, next
         if (j == a || j == b || j == c) {
           continue;
         }
 
         //defining p as OTHER VERTEX
-        p = vertices[j]; 
+        p = vertices[j];
 
         //if p is inside the triangle, NOT an ear
         //skips the curr vertex (cannot be ear)
@@ -164,7 +162,6 @@ function vectorsToString(vertices) {
   return str;
 }
 
-
 /**
  * TODO:
  * - Fix draggable capability for newly created polygons
@@ -178,7 +175,6 @@ function vectorsToString(vertices) {
 //an object that represents a 2-d point, consisting of an x-coordinate and a y-coordinate.
 //vector operations can be done (used for triangulation by doing cross multiplication operations on vertices).
 class Point {
-
   constructor(x, y, id) {
     this.x = x;
     this.y = y;
@@ -201,34 +197,29 @@ class Point {
   //return a string representation of this Point
   toString() {
     return "id:" + this.id + "(" + this.x + ", " + this.y + ")";
-  };
-
+  }
 }
 
 class Polygon {
-    constructor(arrPoints, id){
+  constructor(arrPoints, id) {
+    //arrPoints: array representation of points
+    //id: id of polygon for user (visualization/HTML) to switch between polygons
 
-        //arrPoints: array representation of points
-        //id: id of polygon for user (visualization/HTML) to switch between polygons
-
-        this.arrPoints = arrPoints;
-        this.id = id;
-    }
-      
+    this.arrPoints = arrPoints;
+    this.id = id;
+  }
 
   //splitting the polygon into array of triangles
   triangulate() {
-
     let arrTri = Triangulation(this.arrPoints, this.id);
     return arrTri;
-
-  };
+  }
 
   //prints out string of points
   toString() {
     let str = "{";
     for (let i = 0; i < this.arrPoints.length; i++) {
-        str = str + this.arrPoints[i];
+      str = str + this.arrPoints[i];
     }
     str = str + "}";
   }
@@ -303,7 +294,7 @@ function Animation(svg, polygons) {
   //adding in all the vectors as svgs
   for (let j = 0; j < this.polygons[i].arrPoints.length; j++) {
     let point = this.polygons[i].arrPoints[j];
-    
+
     const newCircle = document.createElementNS(SVG_NS, "circle");
     newCircle.setAttributeNS(null, "cx", point.x);
     newCircle.setAttributeNS(null, "cy", point.y);
@@ -313,8 +304,6 @@ function Animation(svg, polygons) {
     newCircle.classList.add("vertex");
     svg.appendChild(newCircle);
   }
-
-
 }
 
 function Visualizer(svg) {
@@ -337,7 +326,6 @@ function Visualizer(svg) {
     console.log("polys", this.polygons);
 
     for (let i = 0; i < this.polygons.length; i++) {
-
       // making a new polygon
       const newPolygon = document.createElementNS(SVG_NS, "polygon");
       points = pointToString(this.polygons[i].arrPoints);
@@ -348,59 +336,56 @@ function Visualizer(svg) {
       const hue = Math.floor(Math.random() * 255);
       newPolygon.setAttributeNS(null, "fill", "hsl(" + hue + ", 100%, 85%)");
       newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
-      newPolygon.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
+      newPolygon.setAttributeNS(
+        null,
+        "transform",
+        "matrix(1, 0, 0, -1, 0, 500)"
+      );
 
       svg.appendChild(newPolygon);
       this.polygon_elems.push(newPolygon);
-
     }
 
-  //triangulating the current polygon
-  this.triangulate = function () {
-    let arrTri = [];
+    //triangulating the current polygon
+    this.triangulate = function () {
+      let arrTri = [];
 
-    //triangulating the polygon and pushing it onto new array
-    for (let i = 0; i < this.polygons.length; i++) {
-
+      //triangulating the polygon and pushing it onto new array
+      for (let i = 0; i < this.polygons.length; i++) {
         //array of triangles (triangulated polygon)
         arrTri = this.polygons[i].triangulate();
+      }
 
-    }
-
-    // placing triangles into polygons array
-    this.polygons = arrTri;
-
+      // placing triangles into polygons array
+      this.polygons = arrTri;
     };
-  }
+  };
 }
-
 
 //translating between string to points and vice versa
 
-
-function pointToString (arrPoints) {
-    console.log(arrPoints);
+function pointToString(arrPoints) {
+  console.log(arrPoints);
   let str = "";
   for (let i = 0; i < arrPoints.length; i++) {
     str = str + arrPoints[i].x + "," + arrPoints[i].y + " ";
   }
 
   return str;
-};
+}
 
-function stringToPoint (str) {
-    let arr = str.split(" ");
-    let arrPoints = [];
+function stringToPoint(str) {
+  let arr = str.split(" ");
+  let arrPoints = [];
 
-    for (let i = 0; i < arr.length; i++) {
-       let coords = arr[i].split(",");
-       let point = new Point(coords[0], coords[1], i);
-       arrPoints.push(point);
-    }
-
-    return arrPoints;
+  for (let i = 0; i < arr.length; i++) {
+    let coords = arr[i].split(",");
+    let point = new Point(coords[0], coords[1], i);
+    arrPoints.push(point);
   }
 
+  return arrPoints;
+}
 
 const vis = new Visualizer(SVG_ELEM);
 let strPolygon = "100,300, 400,200 550,250 600,20 700,100 750,350, 450,400";
@@ -421,7 +406,8 @@ function visualizeTriangulation() {
 }
 
 function PresetPolygons() {
-  const strRabbit = "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
+  const strRabbit =
+    "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
   const rabbit = new Polygon(stringToPoint(strRabbit), 1);
 
   // const square = new Polygon("100,300 300,300 300,100 100,100", 2);
