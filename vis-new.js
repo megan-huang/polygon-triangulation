@@ -6,7 +6,7 @@ let time = 0;
 
 /**
  * EAR CLIPPING ALGORITHM
- */
+ **/
 
 // Cross product
 function cross(v1, v2) {
@@ -116,7 +116,7 @@ async function Triangulation(vertices, idPolygon, animate) {
         animate.checkConvex(false);
         await delay();
         animate.checkifEar(false);
-        console.log("reflex");
+        console.log("The angle is reflex");
         continue;
       }
 
@@ -325,6 +325,10 @@ function makeDraggable(evt) {
   }
 }
 
+/**
+ * ANIMATION
+ **/
+
 class Animation {
   // svg = svg image that is being drawn on
   // bool = is triangulation animated?
@@ -333,23 +337,43 @@ class Animation {
     this.bool = bool;
   }
 
-  // highlights three points that are passed in. these are the points that are being checked for isEar
-  // also includes drawing a line across for temp triangle
+  // Highlights three points that are passed in. These are the points that are being checked for isEar
+  // Also includes drawing a line across for temp triangle
   // v1 is highlighted a DIFFERENT COLOR
   highlight(array) {
-    console.log("svg: ", SVG_ELEM, this.bool);
+    console.log("Made it to highlighting");
     // array = [v1,v2,v3]
 
-    // creates a line
+    // Creates a line
     const newLine = document.createElementNS(SVG_NS, "line");
-    newLine.setAttributeNS(null, "x1", array[1].x);
-    newLine.setAttributeNS(null, "y1", array[1].y);
-    newLine.setAttributeNS(null, "x2", array[2].x);
-    newLine.setAttributeNS(null, "y2", array[2].y);
+    newLine.setAttributeNS(null, "x1", array[0].x);
+    newLine.setAttributeNS(null, "y1", array[0].y);
+    newLine.setAttributeNS(null, "x2", array[1].x);
+    newLine.setAttributeNS(null, "y2", array[1].y);
     newLine.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
 
     newLine.classList.add("line");
     SVG_ELEM.appendChild(newLine);
+
+    const newLine2 = document.createElementNS(SVG_NS, "line");
+    newLine2.setAttributeNS(null, "x1", array[1].x);
+    newLine2.setAttributeNS(null, "y1", array[1].y);
+    newLine2.setAttributeNS(null, "x2", array[2].x);
+    newLine2.setAttributeNS(null, "y2", array[2].y);
+    newLine2.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
+
+    newLine2.classList.add("line");
+    SVG_ELEM.appendChild(newLine2);
+
+    const newLine3 = document.createElementNS(SVG_NS, "line");
+    newLine3.setAttributeNS(null, "x1", array[2].x);
+    newLine3.setAttributeNS(null, "y1", array[2].y);
+    newLine3.setAttributeNS(null, "x2", array[0].x);
+    newLine3.setAttributeNS(null, "y2", array[0].y);
+    newLine3.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
+
+    newLine3.classList.add("line");
+    SVG_ELEM.appendChild(newLine3);
 
     for (let j = 0; j < array.length; j++) {
       let point = array[j];
@@ -394,7 +418,7 @@ class Animation {
     const newCircle = document.createElementNS(SVG_NS, "circle");
     newCircle.setAttributeNS(null, "cx", vertex.x);
     newCircle.setAttributeNS(null, "cy", vertex.y);
-    newCircle.setAttributeNS(null, "fill", "white");
+    newCircle.setAttributeNS(null, "style", "fill:red !important");
     newCircle.setAttributeNS(null, "transform", "matrix(1, 0, 0, -1, 0, 500)");
 
     newCircle.classList.add("vertex");
@@ -431,7 +455,7 @@ class Animation {
       points = pointToString(array);
 
       newPolygon.setAttributeNS(null, "points", points);
-      newPolygon.setAttributeNS(null, "fill", "white");
+      newPolygon.setAttributeNS(null, "fill", "green");
       newPolygon.setAttributeNS(
         null,
         "transform",
@@ -443,6 +467,10 @@ class Animation {
     }
   }
 }
+
+/**
+ * VISUALIZATION
+ **/
 
 function Visualizer(svg) {
   this.svg = svg;
@@ -483,7 +511,7 @@ function Visualizer(svg) {
       );
 
       SVG_ELEM.appendChild(newPolygon);
-      this.polygon_elems.push(newPolygon);
+      this.polygonElems.push(newPolygon);
     }
 
     // Triangulating the current polygon
@@ -559,7 +587,7 @@ function PresetPolygons() {
   const square = new Polygon(stringToPoint(strSquare), 2);
 
   const strStar = "100,300 400,200 550,250 600,20 700,100 750,350 450,400";
-  const star = new Polygon(stringToPoint(strStar), 2);
+  const star = new Polygon(stringToPoint(strStar), 3);
 
   const arrPresets = [rabbit, square, star];
 
