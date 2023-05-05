@@ -6,8 +6,6 @@ var time = 0;
 
 //start of code for ear clipping
 
-// TODO: Fix to only triangulate once
-
 //useful functions
 
 //cross product
@@ -489,89 +487,86 @@ function Visualizer(svg) {
       this.svg.appendChild(newPolygon);
       this.polygon_elems.push(newPolygon);
     }
-  };
 
-  //triangulating the current polygon
-  this.triangulate = function () {
-    let arrTri = [];
-    //NEEDS A BUTTON TO CHANGE***************************************
-    let animate = new Animation(svg, true);
+    //triangulating the current polygon
+    this.triangulate = function () {
+      let arrTri = [];
+      //NEEDS A BUTTON TO CHANGE***************************************
+      let animate = new Animation(svg, true);
 
-    //triangulating the polygon and pushing it onto new array
-    for (let i = 0; i < this.polygons.length; i++) {
       //triangulating the polygon and pushing it onto new array
       for (let i = 0; i < this.polygons.length; i++) {
         //array of triangles (triangulated polygon)
         arrTri = this.polygons[i].triangulate(animate);
-
-        // placing triangles into polygons array
-        this.polygons = arrTri;
       }
-    }
-  };
 
-  //translating between string to points and vice versa
-
-  function pointToString(arrPoints) {
-    console.log(arrPoints);
-    let str = "";
-    for (let i = 0; i < arrPoints.length; i++) {
-      str = str + arrPoints[i].x + "," + arrPoints[i].y + " ";
-    }
-
-    return str;
-  }
-
-  function stringToPoint(str) {
-    let arr = str.split(" ");
-    let arrPoints = [];
-
-    for (let i = 0; i < arr.length; i++) {
-      let coords = arr[i].split(",");
-      let point = new Point(coords[0], coords[1], i);
-      arrPoints.push(point);
-    }
-
-    return arrPoints;
-  }
-
-  const vis = new Visualizer(SVG_ELEM);
-  let strPolygon = "100,300, 400,200 550,250 600,20 700,100 750,350, 450,400";
-  const polygon = new Polygon(stringToPoint(strPolygon), 1);
-  vis.addPolygon(polygon);
-  vis.drawPolygons();
-
-  // Create a new clear SVG canvas.
-  let createNewSVG = function () {
-    SVG_ELEM.innerHTML = "";
-    vis.changePreset();
-    vis.drawPolygons();
-  };
-
-  function visualizeTriangulation() {
-    vis.triangulate();
-    vis.drawPolygons();
-  }
-
-  function PresetPolygons() {
-    const strRabbit =
-      "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
-    const rabbit = new Polygon(stringToPoint(strRabbit), 1);
-
-    // const square = new Polygon("100,300 300,300 300,100 100,100", 2);
-
-    const strStar = "100,300 400,200 550,250 600,20 700,100 750,350 450,400";
-    const star = new Polygon(stringToPoint(strStar), 2);
-
-    const arrPresets = [rabbit, star];
-
-    let curr = 0;
-
-    this.getNewPolygon = function () {
-      curr = (curr + 1) % arrPresets.length;
-      console.log(curr, "polygon length", arrPresets.length);
-      console.log(arrPresets[curr]);
-      return arrPresets[curr];
+      // placing triangles into polygons array
+      this.polygons = arrTri;
     };
+  };
+}
+
+//translating between string to points and vice versa
+
+function pointToString(arrPoints) {
+  console.log(arrPoints);
+  let str = "";
+  for (let i = 0; i < arrPoints.length; i++) {
+    str = str + arrPoints[i].x + "," + arrPoints[i].y + " ";
   }
+
+  return str;
+}
+
+function stringToPoint(str) {
+  let arr = str.split(" ");
+  let arrPoints = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    let coords = arr[i].split(",");
+    let point = new Point(coords[0], coords[1], i);
+    arrPoints.push(point);
+  }
+
+  return arrPoints;
+}
+
+const vis = new Visualizer(SVG_ELEM);
+let strPolygon = "100,300, 400,200 550,250 600,20 700,100 750,350, 450,400";
+const polygon = new Polygon(stringToPoint(strPolygon), 1);
+vis.addPolygon(polygon);
+vis.drawPolygons();
+
+// Create a new clear SVG canvas.
+let createNewSVG = function () {
+  SVG_ELEM.innerHTML = "";
+  vis.changePreset();
+  vis.drawPolygons();
+};
+
+function visualizeTriangulation() {
+  vis.triangulate();
+  vis.drawPolygons();
+}
+
+function PresetPolygons() {
+  const strRabbit =
+    "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
+  const rabbit = new Polygon(stringToPoint(strRabbit), 1);
+
+  // const square = new Polygon("100,300 300,300 300,100 100,100", 2);
+
+  const strStar = "100,300 400,200 550,250 600,20 700,100 750,350 450,400";
+  const star = new Polygon(stringToPoint(strStar), 2);
+
+  const arrPresets = [rabbit, star];
+
+  let curr = 0;
+
+  this.getNewPolygon = function () {
+    curr = (curr + 1) % arrPresets.length;
+    console.log(curr, "polygon length", arrPresets.length);
+    console.log(arrPresets[curr]);
+    return arrPresets[curr];
+  };
 }
