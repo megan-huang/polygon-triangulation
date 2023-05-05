@@ -135,7 +135,11 @@ async function Triangulation(vertices, idPolygon, animate) {
         }
 
         // Defining p as OTHER VERTEX
+
         p = vertices[j];
+
+        await delay();
+        animate.checkPointInTri(true, p);
 
         // If p is inside the triangle, NOT an ear
         // Skips the curr vertex (cannot be ear)
@@ -144,8 +148,7 @@ async function Triangulation(vertices, idPolygon, animate) {
           isEar = false;
 
           // ANIMATE
-          await delay();
-          animate.checkPointInTri(true, p);
+
           await delay();
           animate.checkifEar(false);
 
@@ -580,7 +583,7 @@ function visualizeTriangulation() {
 
 function PresetPolygons() {
   const strRabbit =
-    "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
+    "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250";
   const rabbit = new Polygon(stringToPoint(strRabbit), 1);
 
   const strSquare = "100,300 300,300 300,100 100,100";
