@@ -11,6 +11,10 @@ body {
     margin: 0px auto;
 }
 
+.off {
+    display: none !important;
+}
+
 #canvas {
     width: 100svw;
     height: 100svh;

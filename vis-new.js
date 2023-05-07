@@ -484,18 +484,6 @@ this.createPresets = function (strs) {
 };
 
 function PresetPolygons() {
-  // const strRabbit =
-  //   "400,400 350,500 300,400 200,400 275,325 225,200 350,275 450,200 425,325 500,400";
-  // const rabbit = new Polygon(stringToPoint(strRabbit), 1);
-
-  // const strSquare =
-  //   "400,550 300,475 200,550 200,450 250,375 250,250 325,200 325,100 250,25 600,25 750,200 750,325 550,100 550,275 350,375 400,450";
-  // const square = new Polygon(stringToPoint(strSquare), 2);
-
-  // const strStar =
-  //   "600,400 550,350 600,350 600,250 650,200 600,150 700,150 650,100 750,100 950,350 800,350 750,300 650,300";
-  // const star = new Polygon(stringToPoint(strStar), 3);
-
   const strs = [
     "400,400 350,500 300,400 200,400 275,325 225,200 350,275 450,200 425,325 500,400",
     "400,550 300,475 200,550 200,450 250,375 250,250 325,200 325,100 250,25 600,25 750,200 750,325 550,100 550,275 350,375 400,450",
@@ -640,5 +628,13 @@ class Animation {
     for (let i = 0; i < messages.length; i++) {
       messages[i].classList.add("hidden");
     }
+  }
+}
+
+function toggleCheckbox() {
+  console.log("made it");
+  let elems = document.getElementsByClassName("all-text");
+  for (let i = 0; i < elems.length; i++) {
+    elems[i].classList.toggle("off");
   }
 }

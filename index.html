@@ -9,21 +9,25 @@
   </head>
   <body>
     <div id="root">
-        <div id="header">
+        <div id="header" class="all-text">
             <h1>Tangriangulate!</h1>
             <h4>By Emi Eliason, Megan Huang and Sarah Wu</h4>
         </div>
 
-        <p>This website visualizes polygon triangulation!</p>
-        <a href="about.html">Learn more about the algorithm and the development of this project</a>
+        <p class="all-text">This website visualizes polygon triangulation!</p>
+        <a class="all-text" href="about.html">Learn more about the algorithm and the development of this project</a>
 
-        <div id="buttons">
+        <div id="buttons" class="all-text">
           <!-- <button>Start Drawing Polygon</button>
           <button>End Drawing Polygon</button> -->
           <button onclick="clearSVG()">Switch Polygon</button>
           <button onclick="visualizeTriangulation(true)">Animate Triangulation</button>
           <button onclick="visualizeTriangulation(false)">Triangulate</button>
           <button onclick="scatter()">Tangramify!</button>
+        </div>
+
+        <div>
+          <input type="checkbox" id="controls" onclick="toggleCheckbox()"> <label for="controls">Hide Controls</label><br>
         </div>
 
         <div id="guides">
