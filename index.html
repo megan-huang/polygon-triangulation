@@ -17,14 +17,19 @@
         <div id="buttons">
           <!-- <button>Start Drawing Polygon</button>
           <button>End Drawing Polygon</button> -->
-          <button onclick="createNewSVG()">Switch Polygon</button>
-          <button onclick="visualizeTriangulation()">Triangulate!</button>
-          <!-- <button>Step Visualization</button>
-          <button>Tangramify!</button> -->
+          <button onclick="clearSVG()">Switch Polygon</button>
+          <button onclick="visualizeTriangulation(true)">Animate Triangulation</button>
+          <button onclick="visualizeTriangulation(false)">Triangulate</button>
+          <!-- <button>Tangramify!</button> -->
         </div>
 
-        <svg id="canvas" xmlns="http://www.w3.org/2000/svg" width="900" height="500" fill="white" onload="makeDraggable(evt)">
-            <rect width="900" height="500" fill="white" transform="matrix(1, 0, 0, -1, 0, 500)"/>
+        <div id="guides">
+          <div id="reflex" class="hidden">This angle is reflex!</div>
+          <div id="point-in-triangle" class="hidden">This triangle has a point in it!</div>
+        </div>
+
+        <svg id="canvas" xmlns="http://www.w3.org/2000/svg" fill="white" onload="makeDraggable(evt)" transform="matrix(1, 0, 0, -1, 0, 0)"">
+            <!-- <rect width="900" height="500" fill="white" transform="matrix(1, 0, 0, -1, 0, 500)"/> -->
         </svg>
     </div>
   </body>
