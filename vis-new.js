@@ -21,8 +21,14 @@ function areaOfTriangle(a, b, c) {
 
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
-async function delay() {
+async function delay1000() {
   await new Promise((resolve) => setTimeout(resolve, 1000));
+}
+
+// Delays animation
+// Second argument: time in milliseconds (1000 = 1 second)
+async function delay300() {
+  await new Promise((resolve) => setTimeout(resolve, 300));
 }
 
 // Returns true if p is inside the triangle formed by a, b, c
@@ -86,8 +92,15 @@ async function Triangulation(vertices, idPolygon, animate) {
   let curIndex = 0;
   // While there are still more than three vertices in the "to-do" list:
   while (vertices.length > 3) {
+    console.log("in while loop");
     // Continue checking for ears
     for (i = 0; i < vertices.length; i++) {
+      console.log("vertices", vertices.length);
+      if (vertices.length <= 3) {
+        console.log("vertices", vertices.length);
+        break;
+      }
+      console.log("in for loop");
       // Get cur, prev, next INDICES
       let a = i;
       let b = accessArray(vertices, i - 1);
@@ -99,10 +112,10 @@ async function Triangulation(vertices, idPolygon, animate) {
       let vc = vertices[c];
 
       // ANIMATE
-      await delay();
+      await delay1000();
       // Highlight the three vertices in question.
       animate.highlight([va, vb, vc]);
-      console.log("highlight ", time++);
+      // console.log("highlight ", time++);
 
       // Get the edges formed by AB and AC
       let va_to_vb = vb.subtract(va);
@@ -112,11 +125,19 @@ async function Triangulation(vertices, idPolygon, animate) {
       // Check if angle is convex (is ear)
       // If cross product of ab and ac is negative, interior angle is convex
       // Else reflex, then skips the curr vertex (cannot be ear)
-      if (cross(va_to_vb, va_to_vc) > 0) {
+      if (cross(va_to_vb, va_to_vc) >= 0) {
+        console.log(
+          "The angle is reflex: ",
+          va_to_vb,
+          " and ",
+          va_to_vc,
+          " and cross ",
+          cross(va_to_vb, va_to_vc)
+        );
         animate.checkConvex(false);
-        await delay();
+        await delay1000();
         animate.checkifEar(false);
-        console.log("The angle is reflex");
+        // console.log("The angle is reflex");
         continue;
       }
 
@@ -138,18 +159,20 @@ async function Triangulation(vertices, idPolygon, animate) {
 
         p = vertices[j];
 
-        await delay();
+        console.log("vertices abcp", a, b, c, p);
+
+        await delay300();
         animate.checkPointInTri(true, p);
 
         // If p is inside the triangle, NOT an ear
         // Skips the curr vertex (cannot be ear)
         if (pointInTriangle(p, vb, va, vc)) {
-          console.log("inside");
+          // console.log("inside");
           isEar = false;
 
           // ANIMATE
 
-          await delay();
+          await delay1000();
           animate.checkifEar(false);
 
           break;
@@ -166,12 +189,14 @@ async function Triangulation(vertices, idPolygon, animate) {
         // Remove the current vertex from the list of vertices
         vertices.splice(a, 1); //remove found curr vertex from list
 
+        console.log("vertices at this point", vertices);
+
         // ANIMATE
-        await delay();
+        await delay1000();
         animate.checkPointInTri(false, p);
-        await delay();
+        await delay1000();
         animate.checkifEar(true, [va, vb, vc]);
-        console.log("checktimer");
+        // console.log("checktimer");
 
         // break;
       }
@@ -179,16 +204,17 @@ async function Triangulation(vertices, idPolygon, animate) {
   }
 
   // Adding last three vertices (last triangle left)
+  console.log("last three", vertices[0], vertices[1], vertices[2]);
   let tri = new Polygon([vertices[0], vertices[1], vertices[2]], idPolygon);
   triangles[curIndex++] = tri;
 
   // ANIMATE
-  await delay();
+  await delay1000();
   animate.checkifEar(true, [vertices[0], vertices[1], vertices[2]]);
 
   // Prints out final list of triangulated triangles
   for (let i = 0; i < triangles.length; i++) {
-    console.log(triangles[i]);
+    // console.log(triangles[i]);
   }
 
   return triangles;
@@ -312,7 +338,7 @@ function makeDraggable(evt) {
       evt.preventDefault();
       var coord = getMousePosition(evt);
       transform.setTranslate(coord.x - offset.x, coord.y - offset.y);
-      console.log("got to dragging");
+      // console.log("got to dragging");
     }
   }
   function endDrag(evt) {
@@ -344,7 +370,7 @@ class Animation {
   // Also includes drawing a line across for temp triangle
   // v1 is highlighted a DIFFERENT COLOR
   highlight(array) {
-    console.log("Made it to highlighting");
+    // console.log("Made it to highlighting");
     // array = [v1,v2,v3]
 
     // Creates a line
@@ -494,7 +520,7 @@ function Visualizer(svg) {
 
   // Draw all of the polygons currently in the polygon array
   this.drawPolygons = function () {
-    console.log("polys", this.polygons);
+    // console.log("polys", this.polygons);
 
     for (let i = 0; i < this.polygons.length; i++) {
       // Making a new polygon
@@ -540,7 +566,7 @@ function Visualizer(svg) {
 
 // Translating between string to Point[] and vice versa
 function pointToString(arrPoints) {
-  console.log(arrPoints);
+  // console.log(arrPoints);
   let str = "";
   for (let i = 0; i < arrPoints.length; i++) {
     str = str + arrPoints[i].x + "," + arrPoints[i].y + " ";
@@ -586,7 +612,7 @@ function PresetPolygons() {
     "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250";
   const rabbit = new Polygon(stringToPoint(strRabbit), 1);
 
-  const strSquare = "100,300 300,300 300,100 100,100";
+  const strSquare = "100,300 100,100 300,100 300,300";
   const square = new Polygon(stringToPoint(strSquare), 2);
 
   const strStar = "100,300 400,200 550,250 600,20 700,100 750,350 450,400";
@@ -600,8 +626,8 @@ function PresetPolygons() {
   // Get a new polygon from the presets
   this.getNewPolygon = function () {
     curr = (curr + 1) % arrPresets.length;
-    console.log(curr, "polygon length", arrPresets.length);
-    console.log(arrPresets[curr]);
+    // console.log(curr, "polygon length", arrPresets.length);
+    // console.log(arrPresets[curr]);
     return arrPresets[curr];
   };
 }
