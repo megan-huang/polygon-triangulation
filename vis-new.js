@@ -356,12 +356,12 @@ function Visualizer(svg) {
     this.polygons = [this.presets.getNewPolygon()];
   };
 
+  // Draw a given polygon
   this.drawPolygon = function (pgn) {
     const newPolygon = document.createElementNS(SVG_NS, "polygon");
     points = pointToString(pgn);
 
     newPolygon.setAttributeNS(null, "points", points);
-    // newPolygon.classList.add("draggable");
 
     const hue = Math.floor(Math.random() * 255);
     newPolygon.setAttributeNS(null, "fill", "hsl(" + hue + ", 100%, 85%)");
