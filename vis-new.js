@@ -408,6 +408,29 @@ function Visualizer(svg) {
       this.polygons = arrTri;
     }
   };
+
+  this.scatter = function () {
+    this.triangulateVis(false);
+
+    let height = SVG_ELEM.getBBox().height;
+    let width = SVG_ELEM.getBBox().width;
+
+    console.log("height width", height, width);
+    for (let i = 0; i < this.polygonElems.length; i++) {
+      transformX = Math.floor(Math.random() * width - width / 2);
+      if (Math.random() > 0.5) {
+        transformX = Math.floor(Math.random() * width + width / 2);
+      }
+      transformY = Math.floor(Math.random() * height * 0.7);
+      this.polygonElems[i].setAttributeNS(
+        null,
+        "transform",
+        "translate(" + transformX + "," + transformY + ")"
+      );
+
+      this.polygonElems[i].classList.add("draggable");
+    }
+  };
 }
 
 // Translating between string to Point[] and vice versa
@@ -444,6 +467,10 @@ let clearSVG = function () {
 function visualizeTriangulation(bool) {
   vis.triangulateVis(bool);
   vis.drawPolygons();
+}
+
+function scatter() {
+  vis.scatter();
 }
 
 this.createPresets = function (strs) {
