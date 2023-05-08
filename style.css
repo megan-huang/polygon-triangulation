@@ -11,12 +11,33 @@ body {
     margin: 0px auto;
 }
 
+.off {
+    display: none !important;
+}
+
+#canvas {
+    width: 100svw;
+    height: 100svh;
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+}
+
 #header {
     background-color: white;
     border-radius: 10px;
     padding: 0.25em;
     text-align: center;
     width: 50svw;
+}
+
+#header-format {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0px auto;
 }
 
 #buttons {
@@ -26,18 +47,56 @@ body {
     border-radius: 5px;
 }
 
+#guides {
+    /* background-color: rgb(164, 204, 243); */
+    display: flex;
+    gap: 15px;
+}
+
+#guides > div {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+#reflex {
+    background-color: rgb(134, 187, 243);
+}
+
+#point-in-triangle  {
+    background-color: rgb(250, 97, 70);
+}
+
 .draggable {
     cursor: move;
 }
 
 .vertex {
-    r: 10px;
-    stroke: black;
-    fill: white;
-    stroke-width: 4;
+    r: 7px;
+    stroke: rgb(103, 74, 15);
+    fill: rgb(255, 255, 156);
+    stroke-width: 2;
+}
+
+.current-vertex {
+    fill: rgb(134, 187, 243);
+    stroke:rgb(31, 63, 97);
+}
+
+.outside-vertex {
+    fill: rgb(136, 250, 113);
+    stroke: rgb(33, 112, 27);
+}
+
+.inside-vertex {
+    fill: rgb(250, 97, 70);
+    stroke: rgb(122, 32, 16);
 }
 
 .line {
     stroke: black;
-    stroke-width: 4;
+    stroke-width: 2;
 }
