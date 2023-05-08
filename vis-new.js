@@ -109,7 +109,7 @@ async function Triangulation(vertices, idTri, animate) {
       //check if angle is convex (is ear)
       //if cross product of ab and ac is negative, interior angle is convex
       //else reflex, then skips the curr vertex (cannot be ear)
-      if (cross(va_to_vb, va_to_vc) > 0) {
+      if (cross(va_to_vb, va_to_vc) >= 0) {
         animate.checkConvex(false);
         await delay();
         animate.checkifEar(false);
@@ -557,12 +557,13 @@ function PresetPolygons() {
   const strRabbit = "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
   const rabbit = new Polygon(stringToPoint(strRabbit), 1);
 
-  // const square = new Polygon("100,300 300,300 300,100 100,100", 2);
+  const strSquare = "100,300 300,300 300,100 100,100";
+  const square = new Polygon(stringToPoint(strSquare), 2);
 
   const strStar = "100,300 400,200 550,250 600,20 700,100 750,350 450,400";
-  const star = new Polygon(stringToPoint(strStar), 2);
+  const star = new Polygon(stringToPoint(strStar), 3);
 
-  const arrPresets = [rabbit, star];
+  const arrPresets = [rabbit, square, star];
 
   let curr = 0;
 
