@@ -490,14 +490,17 @@ function PresetPolygons() {
     "600,400 550,350 600,350 600,250 650,200 600,150 700,150 650,100 750,100 950,350 800,350 750,300 650,300",
   ];
 
-  const arrPresets = createPresets(strs);
+  let arrPresets = createPresets(strs);
 
   // Which polygon we're currently on
   let curr = 0;
 
   // Get a new polygon from the presets
   this.getNewPolygon = function () {
+    arrPresets = createPresets(strs);
     curr = (curr + 1) % arrPresets.length;
+    // print the presets
+    console.log(arrPresets[curr]);
     return arrPresets[curr];
   };
 }
@@ -637,60 +640,4 @@ function toggleCheckbox() {
   for (let i = 0; i < elems.length; i++) {
     elems[i].classList.toggle("off");
   }
-
-  return str;
-};
-
-function stringToPoint (str) {
-    let arr = str.split(" ");
-    let arrPoints = [];
-
-    for (let i = 0; i < arr.length; i++) {
-       let coords = arr[i].split(",");
-       let point = new Point(coords[0], coords[1], i);
-       arrPoints.push(point);
-    }
-
-    return arrPoints;
-  }
-
-
-const vis = new Visualizer(SVG_ELEM);
-let strPolygon = "100,300, 400,200 550,250 600,20 700,100 750,350, 450,400";
-const polygon = new Polygon(stringToPoint(strPolygon), 1);
-vis.addPolygon(polygon);
-vis.drawPolygons();
-
-// Create a new clear SVG canvas.
-let createNewSVG = function () {
-  SVG_ELEM.innerHTML = "";
-  vis.changePreset();
-  vis.drawPolygons();
-};
-
-function visualizeTriangulation() {
-  vis.triangulateVis();
-  vis.drawPolygons();
-}
-
-function PresetPolygons() {
-  const strRabbit = "100,150 150,50 200,150 200,200 350,200 450,120 450,200 400,300 400,400 350,350 350,300 200,300 250,250 100,150";
-  const rabbit = new Polygon(stringToPoint(strRabbit), 1);
-
-  const strSquare = "100,300 300,300 300,100 100,100";
-  const square = new Polygon(stringToPoint(strSquare), 2);
-
-  const strStar = "100,300 400,200 550,250 600,20 700,100 750,350 450,400";
-  const star = new Polygon(stringToPoint(strStar), 3);
-
-  const arrPresets = [rabbit, square, star];
-
-  let curr = 0;
-
-  this.getNewPolygon = function () {
-    curr = (curr + 1) % arrPresets.length;
-    console.log(curr, "polygon length", arrPresets.length);
-    console.log(arrPresets[curr]);
-    return arrPresets[curr];
-  };
 }
