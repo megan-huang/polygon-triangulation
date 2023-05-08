@@ -16,9 +16,8 @@ body {
 }
 
 #canvas {
-    width: 100svw;
-    height: 100svh;
-    position: fixed;
+    width: 1000px;
+    height: 675px;
     z-index: -1;
     top: 0px;
     left: 0px;
