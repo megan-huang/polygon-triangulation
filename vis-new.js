@@ -2,7 +2,7 @@ const SVG_NS = "http://www.w3.org/2000/svg"; // SVG namespace
 const ROOT_ELEM = document.querySelector("#root"); // Root element
 let SVG_ELEM = document.querySelector("#canvas"); // SVG element
 let SVG_ELEM_ANIMATE = document.querySelector("#animate"); // SVG element
-let time = 0;
+let time = 1000;
 
 /**
  * EAR CLIPPING ALGORITHM
@@ -22,13 +22,19 @@ function areaOfTriangle(a, b, c) {
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
 async function delay1000() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, time-300));
 }
 
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
 async function delay300() {
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  await new Promise((resolve) => setTimeout(resolve, time-850));
+}
+
+// Delays animation
+// Second argument: time in milliseconds (1000 = 1 second)
+async function delayset() {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 }
 
 // Returns true if p is inside the triangle formed by a, b, c
@@ -354,6 +360,7 @@ function Visualizer(svg) {
   // Change the preset polygon
   this.changePreset = function () {
     this.polygons = [this.presets.getNewPolygon()];
+    this.polygonElems = [];
   };
 
   // Draw a given polygon
@@ -416,12 +423,10 @@ function Visualizer(svg) {
     let width = SVG_ELEM.getBBox().width;
 
     console.log("height width", height, width);
-    for (let i = 0; i < this.polygonElems.length; i++) {
-      transformX = Math.floor(Math.random() * width - width / 2);
-      if (Math.random() > 0.5) {
-        transformX = Math.floor(Math.random() * width + width / 2);
-      }
-      transformY = Math.floor(Math.random() * height * 0.7);
+    for (let i = 1; i < this.polygonElems.length; i++) {
+      transformX = Math.floor(Math.random() * width/5)-50;
+      transformY = Math.floor(Math.random() * height/5)-50;
+      console.log("",transformX,transformY);
       this.polygonElems[i].setAttributeNS(
         null,
         "transform",
@@ -457,7 +462,9 @@ function stringToPoint(str) {
 }
 
 // Create a new clear SVG canvas.
-let clearSVG = function () {
+let clearSVG = async function () {
+  time = -100;
+  await delayset();
   SVG_ELEM.innerHTML = "";
   vis.changePreset();
   vis.drawPolygons();
@@ -465,6 +472,7 @@ let clearSVG = function () {
 
 // Visualize the triangulation
 function visualizeTriangulation(bool) {
+  time = 1000;
   vis.triangulateVis(bool);
   vis.drawPolygons();
 }
@@ -485,7 +493,7 @@ this.createPresets = function (strs) {
 
 function PresetPolygons() {
   const strs = [
-    "400,400 350,500 300,400 200,400 275,325 225,200 350,275 450,200 425,325 500,400",
+    "600,400 550,500 500,400 400,400 475,325 425,200 550,275 650,200 625,325 700,400",
     "600,550 500,475 400,550 400,450 450,375 450,250 525,200 525,100 450,25 800,25 950,200 950,325 750,100 750,275 550,375 600,450",
     "400,400 350,350 400,350 400,250 450,200 400,150 500,150 450,100 550,100 750,350 600,350 550,300 450,300",
   ];

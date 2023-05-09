@@ -18,9 +18,10 @@ body {
 #canvas {
     width: 1000px;
     height: 568px;
+    position: fixed;
     z-index: -1;
-    top: 0px;
-    left: 0px;
+    top: 200px;
+    left: 350px;
 }
 
 #header {
@@ -41,8 +42,9 @@ body {
 
 #buttons {
     background-color: rgb(164, 204, 243);
+    width: 50svw;
     padding: 5px;
-    margin: 15px;
+    text-align: center;
     border-radius: 5px;
 }
 
