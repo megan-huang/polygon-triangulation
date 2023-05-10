@@ -55,8 +55,8 @@ body {
     display: flex;
     justify-content: center;
     gap: 2svw;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 1svw;
+    padding-bottom: 1svw;
 }
 
 /* ---------------------------- */
