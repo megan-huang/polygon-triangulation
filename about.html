@@ -63,8 +63,7 @@
         we hoped that users would be able to play with and enjoy the shapes that resulted from the algorithm.
         For us, tangrams were a natural connection from polygon triangulation. When the user clicks on "Tangramify!" the
         triangulated peices of the polygon scatter and the user may attempt to peice together the shape. This button
-        will work even
-        if the polygon has not yet been triangulated.
+        will work even if the polygon has not yet been triangulated.
         We included an unmovable version of the original shape at the bottom to guide the process.
     </p>
     <hr>
@@ -74,8 +73,9 @@
         We originally hoped to implement a fast algorithm for polygon triangulation, which involves first
         dividing the polygon into y-monotone subpolygons and then triangulating those monotone polygons.
         This algorithm proved too complicated to comfortably implement, so we decided to use the slower ear clipping
-        method for the project.
-        (You may view some of the unused code for fast triangulation within the javascript files).
+        method for the project. We hoped to have user input for the polygons, but decided against it for the current version.
+        If we wanted to do so in the future, we would have to check if the inputted shapes are in fact polygons and inputted correctly
+        for our algorithm. 
         <br>
         Some of the challenges encountered in the development were related to creating user-friendly visuals. Below
         are a few examples of challenges we encountered.
@@ -109,6 +109,13 @@
     <p>
         <strong>Centering Polygons</strong>:<br>
         The position of the preset polygons are absolute, so some of the polygons appear offcenter.
+    </p>
+
+    <p>
+        <strong>Timer</strong>:<br>
+        When we were working on creating the animation, we struggled to create the effect of a step-by-step animation.
+        Using a regular delay does not pause the rest of the code, so everything still appeared on the screen all at once. 
+        We eventually settled on using "await" and "async" to create the desired effect. 
     </p>
     <hr>
 
