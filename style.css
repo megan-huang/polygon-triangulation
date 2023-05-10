@@ -32,6 +32,10 @@ body {
     width: 50svw;
 }
 
+.all-text {
+    text-align: center;
+}
+
 /* #checkbox {
     position: relative;
     display: flex;
