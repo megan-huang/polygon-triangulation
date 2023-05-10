@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 
-<body>
+<div class="body-format">
     <div id="header-format">
         <div id="header">
             <h1>Information</h1>
@@ -24,8 +24,7 @@
         The broader topic of triangulation in geometry is well studied.
         <br>
         For further research, the art gallery guarding problem, posed by Victor Klee in 1973,
-        is a popular visibility problem in computational geometry that uses polygon triangulation in a solution by
-        Fisk.
+        is a popular visibility problem in computational geometry that employs polygon triangulation.
     </p>
     <p>
         <strong>Theorem 3.1</strong>
@@ -42,27 +41,74 @@
         which states that every simple polygon with more than three vertices has at least two ears.
         These ears, vertices, may be removed from the polygon without causing crossing. The resulting polygon
         likewise satisfies this condition.
-        The algorithm finds and chops ears off, continuing until one triangle remains. This algorithm does not work for
-        polygons with holes.
+        The algorithm finds and chops ears off, continuing until one triangle remains. This algorithm does not work
+        for polygons with holes.
+        As demonstrated by our visualization, this algorithm works by checking whether three points create a convex or
+        reflex angle (forming an "ear" or not),
+        and then cycles through all the other points in the polygon to check whether the points are within the ear.
+        The ear is removed if it passes the conditions—the convex vertex is removed and a new edge is formed between the
+        previous vertex and the next vertex. Triangulation continues on the remaining polygon.
     </p>
     <hr>
 
-    <h2>Development</h2>
+    <h2>Features</h2>
     <p>
-        We originally hoped to implement the fastest feasible algorithm for polygon triangulation, which involves first
+        We wanted a step-by-step demonstration of the process on different examples, so we allow users to cycle
+        through a variety of polygons by clicking "Switch Polygon". "Animate Polygon" will show an animated step-by-step
+        process of the algorithm. "Triangulate" will immediately show the triangulation of the current polygon without
+        showing the whole process.
+    </p>
+    <p>
+        In terms of user interaction,
+        we hoped that users would be able to play with and enjoy the shapes that resulted from the algorithm.
+        For us, tangrams were a natural connection from polygon triangulation. When the user clicks on "Tangramify!" the
+        triangulated peices of the polygon scatter and the user may attempt to peice together the shape. This button
+        will work even
+        if the polygon has not yet been triangulated.
+        We included an unmovable version of the original shape at the bottom to guide the process.
+    </p>
+    <hr>
+
+    <h2>Development & Challenges</h2>
+    <p>
+        We originally hoped to implement a fast algorithm for polygon triangulation, which involves first
         dividing the polygon into y-monotone subpolygons and then triangulating those monotone polygons.
         This algorithm proved too complicated to comfortably implement, so we decided to use the slower ear clipping
         method for the project.
-        You may view some of the unused code for fast triangulation within the javascript files.
-        After shifting focus to ear clipping, some of the challenges encountered in the development can be 
-        attributed to the JavaScript language, for example the lack of a vector object, how it is an untyped language, and difficulties debugging. 
+        (You may view some of the unused code for fast triangulation within the javascript files).
+        <br>
+        Some of the challenges encountered in the development were related to creating user-friendly visuals. Below
+        are a few examples of challenges we encountered.
     </p>
     <p>
-        We wanted a step-by-step demonstration of the process on different examples. 
-        <br>
-        In terms of user interaction, 
-        we hoped that users would be able to play with and enjoy the shapes that resulted from the algorithm. 
-        For us, tangrams were a natural connection from triangulation. 
+        <strong>The Square Problem</strong>:<br>
+        Initially, despite good triangulation results (before we added in animation) on more complicated polygons,
+        our algorithm would
+        not display a nicely triangulated square. This result was especially odd considering this shape should be
+        the base case for triangulation—
+        a polygon with 4 vertices should have two ears (one diangonal). The issue with the square, we found, was
+        that the algorithm cared about how
+        the points were defined—it only wanted points that were defined in counterclockwise order.
+        For example, the algorithm would not treat the below squares the same. We had to be sure that all polygons were
+        inputted accordingly.
+    <div class="images">
+        <img src="square1.png" alt="square 1">
+        <img src="square2.png" alt="square 2">
+    </div>
+    </p>
+
+    <p>
+        <strong>Switching Polygons During Animation</strong>:<br>
+        We ran into the issue of the triangulation animation continuing for a polygon despite switching to another
+        polygon.
+        We tried numerous solutions and settled on speeding through the rest of the animation upon switching polygons.
+        An unfortunate side effect of our solution is that the "switch polygon" button now has some delay that users may
+        notice even when an animation is not in-progress during the switch.
+    </p>
+
+    <p>
+        <strong>Centering Polygons</strong>:<br>
+        The position of the preset polygons are absolute, so some of the polygons appear offcenter.
     </p>
     <hr>
 
@@ -75,12 +121,12 @@
         <li><a href="https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf">Triangulation by
                 Ear Clipping (David Eberly)</a>
         </li>
-        <li><a href="https://www.youtube.com/watch?v=QAdfkylpYwc">Polygon Triangulation - Overview of Ear Clipping</a>
+        <li><a href="https://www.youtube.com/watch?v=QAdfkylpYwc">Polygon Triangulation - Overview of Ear
+                Clipping</a>
         </li>
     </ul>
 
     <hr>
-
-</body>
+</div>
 
 </html>

@@ -32,6 +32,7 @@ body {
     width: 50svw;
 }
 
+/* subpage formatting ---------*/
 #header-format {
     display: flex;
     flex-direction: column;
@@ -39,6 +40,20 @@ body {
     justify-content: center;
     margin: 0px auto;
 }
+
+.body-format {
+    padding-right: 8svw;
+    padding-left: 8svw;
+    padding-bottom: 4svw;
+}
+
+.images {
+    display: flex;
+    justify-content: center;
+    gap: 2svw;
+}
+
+/* ---------------------------- */
 
 #buttons {
     background-color: rgb(164, 204, 243);
@@ -54,7 +69,7 @@ body {
     gap: 15px;
 }
 
-#guides > div {
+#guides>div {
     padding: 5px;
     border-radius: 5px;
 }
@@ -67,7 +82,7 @@ body {
     background-color: rgb(134, 187, 243);
 }
 
-#point-in-triangle  {
+#point-in-triangle {
     background-color: rgb(250, 97, 70);
 }
 
@@ -84,7 +99,7 @@ body {
 
 .current-vertex {
     fill: rgb(134, 187, 243);
-    stroke:rgb(31, 63, 97);
+    stroke: rgb(31, 63, 97);
 }
 
 .outside-vertex {
