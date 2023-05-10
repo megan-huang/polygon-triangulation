@@ -34,7 +34,7 @@ async function delay150() {
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
 async function delayset() {
-  await new Promise((resolve) => setTimeout(resolve, time));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 }
 
 // Returns true if p is inside the triangle formed by a, b, c
