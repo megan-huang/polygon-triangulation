@@ -418,8 +418,8 @@ function Visualizer(svg) {
 
     console.log("height width", height, width);
     for (let i = 1; i < this.polygonElems.length; i++) {
-      transformX = Math.floor(Math.random() * width / 5) - 50;
-      transformY = Math.floor(Math.random() * height / 5) - 50;
+      transformX = Math.floor(Math.random() * width*0.8)-width/2;
+      transformY = Math.floor(Math.random() * height/10);
       console.log("", transformX, transformY);
       this.polygonElems[i].setAttributeNS(
         null,
@@ -488,8 +488,8 @@ this.createPresets = function (strs) {
 // Provided preset polygons 
 function PresetPolygons() {
   const strs = [
-    "600,400 550,500 500,400 400,400 475,325 425,200 550,275 650,200 625,325 700,400",
-    "600,550 500,475 400,550 400,450 450,375 450,250 525,200 525,100 450,25 800,25 950,200 950,325 750,100 750,275 550,375 600,450",
+    "700,400 650,500 600,400 500,400 575,325 525,200 650,275 750,200 725,325 800,400",
+    "700,550 600,475 500,550 500,450 550,375 550,250 625,200 625,100 550,25 900,25 1050,200 1050,325 850,100 850,275 650,375 700,450",
     "400,400 350,350 400,350 400,250 450,200 400,150 500,150 450,100 550,100 750,350 600,350 550,300 450,300",
     "650,400 650,200 850,200 850,400"
   ];
@@ -561,7 +561,6 @@ class Animation {
       }
 
       // newCircle.setAttributeNS(null, "transform", SVG_ELEM.getScreenCTM());
-
       // newCircle.matrixTransform(svg.getScreenCTM());
       newCircle.classList.add("vertex");
 

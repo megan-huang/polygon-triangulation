@@ -45,16 +45,13 @@
         for polygons with holes.
         As demonstrated by our visualization, this algorithm works by checking whether 
         <ol>
-            <li>Three points create an <em>ear</em>: consecutive vertices in which the middle vertex is convex. If the proposed triangle has a reflex vertex in the middle, it is not an ear.</li>
-            <li>The other points of the polygon are not inside the ear.</li>
+            <li>Three points create a convex (forming an "ear" or not). If it creates a reflex vertex, it is not an ear. </li>
+            <li>The other points are not inside the triangle formed by the three original points. </li>
         </ol>
         To check the second step, the code must cycle through all the other points in the polygon to check whether the points are inside.
         The ear is removed if it passes these two conditions—the convex vertex is removed and a new edge is formed between the
-        previous vertex and the next vertex. Triangulation continues on the remaining polygon.</p>
-
-        <p>The running time of our implementation of this algorithm is O(n<sup>3</sup>). It takes O(n) to check whether a triangle has any points inside of it, and O(n<sup>2</sup>) iterating through the polygon vertices.
-        A faster version of the algorithm can be achieved using a doubly-connected linked list
-        to store the polygon vertices, giving easy access to each ear. Given a little more time, we might have implemented this part.</p>
+        previous vertex and the next vertex. Triangulation continues on the remaining polygon.
+    </p>
     <hr>
 
     <h2>Features</h2>
@@ -62,8 +59,9 @@
         We wanted a step-by-step demonstration of the process on different examples, so we allow users to cycle
         through a variety of polygons by clicking "Switch Polygon". "Animate Polygon" will show an animated step-by-step
         process of the algorithm. "Triangulate" will immediately show the triangulation of the current polygon without
-        showing the whole process. For ease of use, please click "hide controls" when interacting with the polygon, as draggability 
-        will work your the entire screen. 
+        showing the whole process. For ease of use, please click "hide controls" when interacting with the polygon, as
+        draggability
+        will work your the entire screen.
     </p>
     <p>
         In terms of user interaction,
@@ -81,7 +79,7 @@
         dividing the polygon into y-monotone subpolygons and then triangulating those monotone polygons.
         This algorithm proved too complicated to comfortably implement, so we decided to use the slower ear clipping
         method for the project. We hoped to have user input for the polygons, but decided against it for the current version.
-        If we wanted to do so in the future, we would have to check if the shapes are in fact polygons, have no holes, and are inputted correctly
+        If we wanted to do so in the future, we would have to check if the inputted shapes are in fact polygons and inputted correctly
         for our algorithm. 
         <br>
         Some of the challenges encountered in the development were related to creating user-friendly visuals. Below
@@ -99,11 +97,11 @@
         is convex or reflex relies on the cross product of the two vectors making up the ear being negative. 
         For example, the algorithm would not treat the below squares the same – one would have a negative cross product and the other would have a positive cross product. We had to be sure that all polygons were
         inputted accordingly.
+    </p>
     <div class="images">
         <img src="images/square1.png" alt="square 1">
         <img src="images/square2.png" alt="square 2">
     </div>
-    </p>
 
     <p>
         <strong>Switching Polygons During Animation</strong>:<br>
@@ -111,7 +109,8 @@
         polygon.
         We tried numerous solutions and settled on speeding through the rest of the animation upon switching polygons.
         An unfortunate side effect of our solution is that the "switch polygon" button now has some delay that users may
-        notice even when an animation is not in-progress during the switch.
+        notice even when an animation is not in-progress during the switch. This is necessary to prevent bugs when
+        switching back and forth from the "Animate" button.
     </p>
 
     <p>
@@ -122,8 +121,9 @@
     <p>
         <strong>Timer</strong>:<br>
         When we were working on creating the animation, we struggled to create the effect of a step-by-step animation.
-        Using a regular delay does not pause the rest of the code, so everything still appeared on the screen all at once. 
-        We eventually settled on using "await" and "async" to create the desired effect. 
+        Using a regular delay does not pause the rest of the code, so everything still appeared on the screen all at
+        once.
+        We eventually settled on using "await" and "async" to create the desired effect.
     </p>
     <hr>
 
@@ -136,9 +136,12 @@
         <li><a href="https://www.youtube.com/watch?v=QAdfkylpYwc">Polygon Triangulation - Overview of Ear
                 Clipping</a>
         </li>
-        <li><a href="https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/">Draggable SVG elements</a></li>
+        <li><a href="https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/">Draggable SVG elements</a>
+        </li>
         <li><a href="https://www.sitepoint.com/delay-sleep-pause-wait/">Delay/Sleep/Pause/Wait instructions</a> </li>
-        <li><a href="https://www.quora.com/How-do-I-check-whether-a-given-point-lies-inside-a-triangle-whose-coordinates-are-given#:~:text=In%20order%20to%20check%20weather,point%20whose%20position%20is%20given.&text=if(area%20of%20PAB%2BPBC,otherwise%20its%20outside%20the%20triangle."> Formula to determine point in triangle</a></li>
+        <li><a
+                href="https://www.quora.com/How-do-I-check-whether-a-given-point-lies-inside-a-triangle-whose-coordinates-are-given#:~:text=In%20order%20to%20check%20weather,point%20whose%20position%20is%20given.&text=if(area%20of%20PAB%2BPBC,otherwise%20its%20outside%20the%20triangle.">
+                Formula to determine point in triangle</a></li>
     </ul>
 
     <hr>
