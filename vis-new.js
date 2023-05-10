@@ -22,13 +22,13 @@ function areaOfTriangle(a, b, c) {
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
 async function delay1000() {
-  await new Promise((resolve) => setTimeout(resolve, time-300));
+  await new Promise((resolve) => setTimeout(resolve, time - 300));
 }
 
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
 async function delay300() {
-  await new Promise((resolve) => setTimeout(resolve, time-850));
+  await new Promise((resolve) => setTimeout(resolve, time - 850));
 }
 
 // Delays animation
@@ -224,13 +224,6 @@ function pointsToString(vertices) {
   return str;
 }
 
-/**
- * TODO:
- * - Fix draggable capability for newly created polygons
- * - "Scatter" method
- * - Draw own polygon
- *
- */
 
 // An object that represents a 2D point, consisting of an x-coordinate and a y-coordinate.
 // Vector operations can be done (used for triangulation by doing cross multiplication operations on vertices).
@@ -416,6 +409,7 @@ function Visualizer(svg) {
     }
   };
 
+  // Scattering the polygon's triangulated peices (tangram functionality)
   this.scatter = function () {
     this.triangulateVis(false);
 
@@ -424,9 +418,9 @@ function Visualizer(svg) {
 
     console.log("height width", height, width);
     for (let i = 1; i < this.polygonElems.length; i++) {
-      transformX = Math.floor(Math.random() * width/5)-50;
-      transformY = Math.floor(Math.random() * height/5)-50;
-      console.log("",transformX,transformY);
+      transformX = Math.floor(Math.random() * width / 5) - 50;
+      transformY = Math.floor(Math.random() * height / 5) - 50;
+      console.log("", transformX, transformY);
       this.polygonElems[i].setAttributeNS(
         null,
         "transform",
@@ -491,6 +485,7 @@ this.createPresets = function (strs) {
   return presets;
 };
 
+// Provided preset polygons 
 function PresetPolygons() {
   const strs = [
     "600,400 550,500 500,400 400,400 475,325 425,200 550,275 650,200 625,325 700,400",
@@ -516,6 +511,7 @@ function PresetPolygons() {
 const vis = new Visualizer(SVG_ELEM);
 vis.changePreset();
 vis.drawPolygons();
+
 
 /**
  * ANIMATION
