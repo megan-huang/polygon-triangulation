@@ -43,10 +43,13 @@
         likewise satisfies this condition.
         The algorithm finds and chops ears off, continuing until one triangle remains. This algorithm does not work
         for polygons with holes.
-        As demonstrated by our visualization, this algorithm works by checking whether three points create a convex or
-        reflex angle (forming an "ear" or not),
-        and then cycles through all the other points in the polygon to check whether the points are within the ear.
-        The ear is removed if it passes the conditions—the convex vertex is removed and a new edge is formed between the
+        As demonstrated by our visualization, this algorithm works by checking whether 
+        <ol>
+            <li>Three points create a convex (forming an "ear" or not). If it creates a reflex vertex, it is not an ear. </li>
+            <li>The other points are not inside the triangle formed by the three original points. </li>
+        </ol>
+        To check the second step, the code must cycle through all the other points in the polygon to check whether the points are inside.
+        The ear is removed if it passes these two conditions—the convex vertex is removed and a new edge is formed between the
         previous vertex and the next vertex. Triangulation continues on the remaining polygon.
     </p>
     <hr>
