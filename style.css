@@ -16,12 +16,12 @@ body {
 }
 
 #canvas {
-    width: 1000px;
-    height: 568px;
+    width: 100svw;
+    height: 100svh;
     position: fixed;
     z-index: -1;
-    top: 200px;
-    left: 350px;
+    top: 0;
+    left: 0;
 }
 
 #header {
