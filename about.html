@@ -44,6 +44,7 @@
         The algorithm finds and chops ears off, continuing until one triangle remains. This algorithm does not work
         for polygons with holes.
         As demonstrated by our visualization, this algorithm works by checking whether 
+        </p>
         <ol>
             <li>Three points create a convex (forming an "ear" or not). If it creates a reflex vertex, it is not an ear. </li>
             <li>The other points are not inside the triangle formed by the three original points. </li>
@@ -51,7 +52,6 @@
         To check the second step, the code must cycle through all the other points in the polygon to check whether the points are inside.
         The ear is removed if it passes these two conditions—the convex vertex is removed and a new edge is formed between the
         previous vertex and the next vertex. Triangulation continues on the remaining polygon.
-    </p>
     <hr>
 
     <h2>Features</h2>
@@ -95,11 +95,11 @@
         the points were defined—it only wanted points that were defined in counterclockwise order.
         For example, the algorithm would not treat the below squares the same. We had to be sure that all polygons were
         inputted accordingly.
+    </p>
     <div class="images">
         <img src="images/square1.png" alt="square 1">
         <img src="images/square2.png" alt="square 2">
     </div>
-    </p>
 
     <p>
         <strong>Switching Polygons During Animation</strong>:<br>
