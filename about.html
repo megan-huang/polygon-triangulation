@@ -14,6 +14,9 @@
             <h1>Information</h1>
         </div>
     </div>
+    <div id="gif">
+        <img src="images/triangle.gif" alt="triangle gif" width="200">
+    </div>
 
     <p><a href="index.html">Back to triangulation</a></p>
     <h2>Motivation</h2>
@@ -36,21 +39,27 @@
 
     <h2>Ear Clipping Algorithm</h2>
     <p>
-        Our chosen algorithm for polygon triangulation is the ear clipping algorithm. Max Dehn (though often attributed to
+        Our chosen algorithm for polygon triangulation is the ear clipping algorithm. Max Dehn (though often attributed
+        to
         Meisters) proved the two ears theorem,
-        which states that every simple polygon with more than three vertices has at least two "ears" (triangles that can be caught off).
-        These ears may be removed from the polygon without affecting the rest of the polygon. The resulting polygon with the ear cut off
+        which states that every simple polygon with more than three vertices has at least two "ears" (triangles that can
+        be caught off).
+        These ears may be removed from the polygon without affecting the rest of the polygon. The resulting polygon with
+        the ear cut off
         likewise satisfies this condition.
         The algorithm finds and chops ears off, continuing until one triangle remains. This algorithm does not work
         for polygons with holes.
-        As demonstrated by our visualization, this algorithm works by checking whether 
-        <ol>
-            <li>Three points create a convex (forming an "ear" or not). If it creates a reflex vertex, it is not an ear. </li>
-            <li>The other points are not inside the triangle formed by the three original points. </li>
-        </ol>
-        To check the second step, the code must cycle through all the other points in the polygon to check whether the points are inside.
-        The ear is removed if it passes these two conditions—the convex vertex is removed and a new edge is formed between the
-        previous vertex and the next vertex. Triangulation continues on the remaining polygon.
+        As demonstrated by our visualization, this algorithm works by checking whether
+    <ol>
+        <li>Three points create a convex (forming an "ear" or not). If it creates a reflex vertex, it is not an ear.
+        </li>
+        <li>The other points are not inside the triangle formed by the three original points. </li>
+    </ol>
+    To check the second step, the code must cycle through all the other points in the polygon to check whether the
+    points are inside.
+    The ear is removed if it passes these two conditions—the convex vertex is removed and a new edge is formed between
+    the
+    previous vertex and the next vertex. Triangulation continues on the remaining polygon.
     </p>
     <hr>
 
@@ -78,9 +87,11 @@
         We originally hoped to implement a fast algorithm for polygon triangulation, which involves first
         dividing the polygon into y-monotone subpolygons and then triangulating those monotone polygons.
         This algorithm proved too complicated to comfortably implement, so we decided to use the slower ear clipping
-        method for the project. We hoped to have user input for the polygons, but decided against it for the current version.
-        If we wanted to do so in the future, we would have to check if the inputted shapes are in fact polygons and inputted correctly
-        for our algorithm. 
+        method for the project. We hoped to have user input for the polygons, but decided against it for the current
+        version.
+        If we wanted to do so in the future, we would have to check if the inputted shapes are in fact polygons and
+        inputted correctly
+        for our algorithm.
         <br>
         Some of the challenges encountered in the development were related to creating user-friendly visuals. Below
         are a few examples of challenges we encountered.
@@ -93,9 +104,11 @@
         the base case for triangulation —
         a polygon with 4 vertices should have two ears (one diagonal). The issue with the square, we found, was
         that the algorithm cared about how
-        the points were defined — it only wanted points that were defined in counterclockwise order, because checking whether an angle
-        is convex or reflex relies on the cross product of the two vectors making up the ear being negative. 
-        For example, the algorithm would not treat the below squares the same – one would have a negative cross product and the other would have a positive cross product. We had to be sure that all polygons were
+        the points were defined — it only wanted points that were defined in counterclockwise order, because checking
+        whether an angle
+        is convex or reflex relies on the cross product of the two vectors making up the ear being negative.
+        For example, the algorithm would not treat the below squares the same – one would have a negative cross product
+        and the other would have a positive cross product. We had to be sure that all polygons were
         inputted accordingly.
     </p>
     <div class="images">
@@ -115,7 +128,9 @@
 
     <p>
         <strong>Centering Polygons</strong>:<br>
-        The position of the preset polygons are absolute, so some of the polygons appear offcenter. It proved to be more difficult than anticipated to calculate the correct transformations to get the polygon, and the tangram pieces, to appear on screen nicely.
+        The position of the preset polygons are absolute, so some of the polygons appear offcenter. It proved to be more
+        difficult than anticipated to calculate the correct transformations to get the polygon, and the tangram pieces,
+        to appear on screen nicely.
     </p>
 
     <p>
@@ -142,6 +157,7 @@
         <li><a
                 href="https://www.quora.com/How-do-I-check-whether-a-given-point-lies-inside-a-triangle-whose-coordinates-are-given#:~:text=In%20order%20to%20check%20weather,point%20whose%20position%20is%20given.&text=if(area%20of%20PAB%2BPBC,otherwise%20its%20outside%20the%20triangle.">
                 Formula to determine point in triangle</a></li>
+        <li><a href="https://gifer.com/en/7fPE">Triangle GIF</a></li>
     </ul>
 
     <hr>

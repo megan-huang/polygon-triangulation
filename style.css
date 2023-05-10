@@ -56,6 +56,12 @@ body {
     padding-bottom: 1svw;
 }
 
+#gif {
+    display: flex;
+    justify-content: center;
+    padding-top: 1svw;
+}
+
 /* ---------------------------- */
 
 
