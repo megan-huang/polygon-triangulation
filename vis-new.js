@@ -21,20 +21,20 @@ function areaOfTriangle(a, b, c) {
 
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
-async function delay1000() {
+async function delay700() {
   await new Promise((resolve) => setTimeout(resolve, time - 300));
 }
 
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
-async function delay300() {
+async function delay150() {
   await new Promise((resolve) => setTimeout(resolve, time - 850));
 }
 
 // Delays animation
 // Second argument: time in milliseconds (1000 = 1 second)
 async function delayset() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, time));
 }
 
 // Returns true if p is inside the triangle formed by a, b, c
@@ -114,7 +114,7 @@ async function Triangulation(vertices, idPolygon, animate) {
       let vc = vertices[c];
 
       // ANIMATE
-      animate.bool ? await delay1000() : "";
+      animate.bool ? await delay700() : "";
       // Highlight the three vertices in question.
       animate.highlight([va, vb, vc]);
 
@@ -136,7 +136,7 @@ async function Triangulation(vertices, idPolygon, animate) {
           cross(va_to_vb, va_to_vc)
         );
         animate.checkConvex(false);
-        animate.bool ? await delay1000() : "";
+        animate.bool ? await delay700() : "";
         animate.clearPoints([va, vb, vc]);
         continue;
       }
@@ -144,7 +144,7 @@ async function Triangulation(vertices, idPolygon, animate) {
       // ANIMATE
       animate.checkConvex(true);
 
-      //CONDITION TWO:
+      // CONDITION TWO:
       // Check if other vertices are OUTSIDE proposed triangle (is ear)
       isEar = true; // Assumes ear (vertices are outside)
 
@@ -166,14 +166,14 @@ async function Triangulation(vertices, idPolygon, animate) {
 
           // ANIMATE
 
-          animate.bool ? await delay1000() : "";
+          animate.bool ? await delay700() : "";
           animate.checkPointInTri(true, p);
-          animate.bool ? await delay1000() : "";
+          animate.bool ? await delay700() : "";
           animate.clearPoints([va, vb, vc]);
 
           break;
         } else {
-          animate.bool ? await delay300() : "";
+          animate.bool ? await delay150() : "";
           animate.checkPointInTri(false, p);
         }
       }
@@ -189,13 +189,11 @@ async function Triangulation(vertices, idPolygon, animate) {
         vertices.splice(a, 1); //remove found curr vertex from list
 
         // ANIMATE
-        animate.bool ? await delay1000() : "";
+        animate.bool ? await delay700() : "";
         animate.checkPointInTri(false, p);
-        animate.bool ? await delay1000() : "";
+        animate.bool ? await delay700() : "";
         animate.clearPoints([va, vb, vc]);
         animate.checkifEar(true, [va, vb, vc]);
-
-        // break;
       }
     }
   }
@@ -205,13 +203,14 @@ async function Triangulation(vertices, idPolygon, animate) {
   triangles[curIndex++] = tri;
 
   // ANIMATE
-  animate.bool ? await delay1000() : "";
+  animate.bool ? await delay700() : "";
   animate.checkifEar(true, [vertices[0], vertices[1], vertices[2]]);
 
+  // Return the Polygon[] at the end.
   return triangles;
 }
 
-// Takes in Point[] and returns a string representation of them
+// Takes in Point[] and returns a string representation of them.
 function pointsToString(vertices) {
   let str = "";
   for (let i = 0; i < vertices.length; i++) {
@@ -223,7 +222,6 @@ function pointsToString(vertices) {
   }
   return str;
 }
-
 
 // An object that represents a 2D point, consisting of an x-coordinate and a y-coordinate.
 // Vector operations can be done (used for triangulation by doing cross multiplication operations on vertices).
@@ -261,7 +259,7 @@ class Polygon {
 
   // Splitting the polygon into array of triangles
   triangulate(animate) {
-    // Run Triangulation on the Point[], with this id, an instance of the Animate class
+    // Run Triangulation on the Point[], with this id, and an instance of the Animate class
     let arrTri = Triangulation(this.arrPoints, this.id, animate);
     return arrTri;
   }
@@ -298,7 +296,6 @@ function makeDraggable(evt) {
       offset = getMousePosition(evt);
       var transforms = dragTarget.transform.baseVal;
 
-      //
       if (
         transforms.length === 0 ||
         transforms.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
@@ -315,17 +312,24 @@ function makeDraggable(evt) {
       offset.y -= transform.matrix.f;
     }
   }
+
+  // Drag
   function drag(evt) {
+    // If there is a target, translate by the mouse position
     if (dragTarget != null) {
       evt.preventDefault();
       var coord = getMousePosition(evt);
       transform.setTranslate(coord.x - offset.x, coord.y - offset.y);
     }
   }
+
+  // End drag
   function endDrag(evt) {
+    // Set the target to null
     dragTarget = null;
   }
 
+  // Get mouse position from screen coordinates
   function getMousePosition(evt) {
     var CTM = svg.getScreenCTM();
     return {
@@ -356,17 +360,19 @@ function Visualizer(svg) {
     this.polygonElems = [];
   };
 
-  // Draw a given polygon
+  // Draw a given Polygon
   this.drawPolygon = function (pgn) {
     const newPolygon = document.createElementNS(SVG_NS, "polygon");
     points = pointToString(pgn);
 
     newPolygon.setAttributeNS(null, "points", points);
 
+    // Random color
     const hue = Math.floor(Math.random() * 255);
     newPolygon.setAttributeNS(null, "fill", "hsl(" + hue + ", 100%, 85%)");
     newPolygon.setAttributeNS(null, "stroke", "hsl(" + hue + ", 100%, 15%)");
 
+    // Append to SVG and SVG elems array
     SVG_ELEM.appendChild(newPolygon);
     this.polygonElems.push(newPolygon);
   };
@@ -374,12 +380,10 @@ function Visualizer(svg) {
   // Draw all of the polygons currently in the polygon array
   this.drawPolygons = function () {
     for (let i = 0; i < this.polygons.length; i++) {
-      // Making a new polygon
       const newPolygon = document.createElementNS(SVG_NS, "polygon");
       points = pointToString(this.polygons[i].arrPoints);
 
       newPolygon.setAttributeNS(null, "points", points);
-      // newPolygon.classList.add("draggable");
 
       const hue = Math.floor(Math.random() * 255);
       newPolygon.setAttributeNS(null, "fill", "hsl(" + hue + ", 100%, 85%)");
@@ -393,7 +397,6 @@ function Visualizer(svg) {
   // Triangulating the current polygon
   this.triangulateVis = function (bool) {
     let arrTri = [];
-    // NEEDS A BUTTON TO CHANGE***************************************
     let animate = new Animation(svg, bool);
 
     // Triangulating the polygon and pushing it onto new array
@@ -413,20 +416,25 @@ function Visualizer(svg) {
   this.scatter = function () {
     this.triangulateVis(false);
 
+    // Get the height and width of the SVG elem
     let height = SVG_ELEM.getBBox().height;
     let width = SVG_ELEM.getBBox().width;
 
-    console.log("height width", height, width);
+    // Change the original polygon to a "guide" by making it gray
+    this.polygonElems[0].setAttributeNS(null, "fill", "hsl(30, 0%, 85%)");
+    this.polygonElems[0].setAttributeNS(null, "stroke", "hsl(30, 0%, 30%)");
+
     for (let i = 1; i < this.polygonElems.length; i++) {
-      transformX = Math.floor(Math.random() * width*0.8)-width/2;
-      transformY = Math.floor(Math.random() * height/10);
-      console.log("", transformX, transformY);
+      // Scatter the rest of the elements around
+      transformX = Math.floor(Math.random() * width * 0.8) - width / 2;
+      transformY = Math.floor((Math.random() * height) / 10);
       this.polygonElems[i].setAttributeNS(
         null,
         "transform",
         "translate(" + transformX + "," + transformY + ")"
       );
 
+      // Make them draggable
       this.polygonElems[i].classList.add("draggable");
     }
   };
@@ -471,6 +479,7 @@ function visualizeTriangulation(bool) {
   vis.drawPolygons();
 }
 
+// Scatter
 function scatter() {
   vis.scatter();
 }
@@ -485,13 +494,15 @@ this.createPresets = function (strs) {
   return presets;
 };
 
-// Provided preset polygons 
+// Provided preset polygons
 function PresetPolygons() {
   const strs = [
     "700,400 650,500 600,400 500,400 575,325 525,200 650,275 750,200 725,325 800,400",
     "700,550 600,475 500,550 500,450 550,375 550,250 625,200 625,100 550,25 900,25 1050,200 1050,325 850,100 850,275 650,375 700,450",
     "400,400 350,350 400,350 400,250 450,200 400,150 500,150 450,100 550,100 750,350 600,350 550,300 450,300",
-    "650,400 650,200 850,200 850,400"
+    "650,400 650,200 850,200 850,400",
+    "465,195 535,110 615,70 750,115 830,200 740,330 665,405 720,450 815,415 880,450 765,510 620,505 560,395 640,285 730,215 615,155 460,310",
+    "510,335 360,255 415,180 555,260 725,105 915,275 930,410 1050,500 1115,445 1155,600 950,615 1020,555 900,480 820,540 725,425 610,540 500,435",
   ];
 
   let arrPresets = createPresets(strs);
@@ -503,8 +514,6 @@ function PresetPolygons() {
   this.getNewPolygon = function () {
     arrPresets = createPresets(strs);
     curr = (curr + 1) % arrPresets.length;
-    // print the presets
-    console.log(arrPresets[curr]);
     return arrPresets[curr];
   };
 }
@@ -512,7 +521,6 @@ function PresetPolygons() {
 const vis = new Visualizer(SVG_ELEM);
 vis.changePreset();
 vis.drawPolygons();
-
 
 /**
  * ANIMATION
@@ -532,22 +540,19 @@ class Animation {
   highlight(array) {
     // array = [v1,v2,v3]
 
-    // Creates a line
-
+    // Creates line between all vertices
     for (let i = 0; i < array.length; i++) {
       const newLine = document.createElementNS(SVG_NS, "line");
       newLine.setAttributeNS(null, "x1", array[i].x);
       newLine.setAttributeNS(null, "y1", array[i].y);
       newLine.setAttributeNS(null, "x2", array[accessArray(array, i + 1)].x);
       newLine.setAttributeNS(null, "y2", array[accessArray(array, i + 1)].y);
-      // newLine.setAttributeNS(null, "transform", SVG_ELEM.getScreenCTM());
-
-      // newLine.matrixTransform(svg.getScreenCTM());
 
       newLine.classList.add("line");
       SVG_ELEM.appendChild(newLine);
     }
 
+    // Create vertices
     for (let j = 0; j < array.length; j++) {
       let point = array[j];
 
@@ -555,32 +560,28 @@ class Animation {
       newCircle.setAttributeNS(null, "cx", point.x);
       newCircle.setAttributeNS(null, "cy", point.y);
 
-      // special highlighted option for v1
+      // Special highlighted option for v1
       if (j == 0) {
         newCircle.classList.add("current-vertex");
       }
 
-      // newCircle.setAttributeNS(null, "transform", SVG_ELEM.getScreenCTM());
-      // newCircle.matrixTransform(svg.getScreenCTM());
       newCircle.classList.add("vertex");
 
       SVG_ELEM.appendChild(newCircle);
     }
   }
 
-  // if v1 is a convex, will show msg
+  // If v1 is a reflex, will show msg
   checkConvex(bool) {
     if (!bool) {
       let message = document.getElementById("reflex");
       message.classList.remove("hidden");
       return;
     }
-
-    //msg "point is NOT convex!"
   }
 
-  // highlight other points in triangle (inside loop of pointInTriangle method)
-  // show msg if it is in triangle or if it is not
+  // Highlight other points in triangle (inside loop of pointInTriangle method)
+  // Show msg if it is in triangle or if it is not
   checkPointInTri(bool, vertex) {
     // vertex = highlighted (OTHER) vertex
 
@@ -589,45 +590,41 @@ class Animation {
     newCircle.setAttributeNS(null, "cy", vertex.y);
     newCircle.classList.add("vertex");
 
-    //checking if point is in triangle
+    // Checking if point is in triangle
     if (bool) {
-      console.log("got to point in triangle!", vertex, newCircle);
       newCircle.classList.add("inside-vertex");
-      // SVG_ELEM.appendChild(newCircle);
 
       let message = document.getElementById("point-in-triangle");
       message.classList.remove("hidden");
-
-      // return;
     } else {
       newCircle.classList.add("outside-vertex");
     }
     SVG_ELEM.appendChild(newCircle);
-
-    //msg "point is NOT in triangle!"
   }
 
-  // remove line
+  // Append ear
   checkifEar(bool, array) {
     if (bool) {
       vis.drawPolygon(array);
     }
   }
 
+  // Remove visible points and lines
   clearPoints(array) {
     // array = [v1,v2,v3]
-    // remove line
+    // Remove line
     const ele_line = document.getElementsByClassName("line");
     while (ele_line.length > 0) {
       ele_line[0].parentNode.removeChild(ele_line[0]);
     }
 
-    // remove vertex
+    // Remove vertex
     const ele_point = document.getElementsByClassName("vertex");
     while (ele_point.length > 0) {
       ele_point[0].parentNode.removeChild(ele_point[0]);
     }
 
+    // Remove messages
     const messages = [
       document.getElementById("reflex"),
       document.getElementById("point-in-triangle"),
@@ -639,7 +636,6 @@ class Animation {
 }
 
 function toggleCheckbox() {
-  console.log("made it");
   let elems = document.getElementsByClassName("all-text");
   for (let i = 0; i < elems.length; i++) {
     elems[i].classList.toggle("off");
