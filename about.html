@@ -34,24 +34,27 @@
     </p>
     <hr>
 
-    <h2>Ear Clipping Method</h2>
+    <h2>Ear Clipping Algorithm</h2>
     <p>
-        Our chosen method for polygon triangulation is the ear clipping method. Max Dehn (though often attributed to
+        Our chosen algorithm for polygon triangulation is the ear clipping algorithm. Max Dehn (though often attributed to
         Meisters) proved the two ears theorem,
-        which states that every simple polygon with more than three vertices has at least two ears.
-        These ears, vertices, may be removed from the polygon without causing crossing. The resulting polygon
+        which states that every simple polygon with more than three vertices has at least two "ears" (triangles that can be caught off).
+        These ears may be removed from the polygon without affecting the rest of the polygon. The resulting polygon with the ear cut off
         likewise satisfies this condition.
         The algorithm finds and chops ears off, continuing until one triangle remains. This algorithm does not work
         for polygons with holes.
         As demonstrated by our visualization, this algorithm works by checking whether 
         <ol>
-            <li>Three points create a convex (forming an "ear" or not). If it creates a reflex vertex, it is not an ear. </li>
-            <li>The other points are not inside the triangle formed by the three original points. </li>
+            <li>Three points create an <em>ear</em>: consecutive vertices in which the middle vertex is convex. If the proposed triangle has a reflex vertex in the middle, it is not an ear.</li>
+            <li>The other points of the polygon are not inside the ear.</li>
         </ol>
         To check the second step, the code must cycle through all the other points in the polygon to check whether the points are inside.
         The ear is removed if it passes these two conditions—the convex vertex is removed and a new edge is formed between the
-        previous vertex and the next vertex. Triangulation continues on the remaining polygon.
-    </p>
+        previous vertex and the next vertex. Triangulation continues on the remaining polygon.</p>
+
+        <p>The running time of our implementation of this algorithm is O(n<sup>3</sup>). It takes O(n) to check whether a triangle has any points inside of it, and O(n<sup>2</sup>) iterating through the polygon vertices.
+        A faster version of the algorithm can be achieved using a doubly-connected linked list
+        to store the polygon vertices, giving easy access to each ear. Given a little more time, we might have implemented this part.</p>
     <hr>
 
     <h2>Features</h2>
@@ -66,9 +69,9 @@
         In terms of user interaction,
         we hoped that users would be able to play with and enjoy the shapes that resulted from the algorithm.
         For us, tangrams were a natural connection from polygon triangulation. When the user clicks on "Tangramify!" the
-        triangulated peices of the polygon scatter and the user may attempt to peice together the shape. This button
+        triangulated pieces of the polygon scatter and the user may attempt to pieces together the shape. This button
         will work even if the polygon has not yet been triangulated.
-        We included an unmovable version of the original shape at the bottom to guide the process.
+        We included an unmovable version of the original shape to guide the process.
     </p>
     <hr>
 
@@ -78,7 +81,7 @@
         dividing the polygon into y-monotone subpolygons and then triangulating those monotone polygons.
         This algorithm proved too complicated to comfortably implement, so we decided to use the slower ear clipping
         method for the project. We hoped to have user input for the polygons, but decided against it for the current version.
-        If we wanted to do so in the future, we would have to check if the inputted shapes are in fact polygons and inputted correctly
+        If we wanted to do so in the future, we would have to check if the shapes are in fact polygons, have no holes, and are inputted correctly
         for our algorithm. 
         <br>
         Some of the challenges encountered in the development were related to creating user-friendly visuals. Below
@@ -89,11 +92,12 @@
         Initially, despite good triangulation results (before we added in animation) on more complicated polygons,
         our algorithm would
         not display a nicely triangulated square. This result was especially odd considering this shape should be
-        the base case for triangulation—
-        a polygon with 4 vertices should have two ears (one diangonal). The issue with the square, we found, was
+        the base case for triangulation —
+        a polygon with 4 vertices should have two ears (one diagonal). The issue with the square, we found, was
         that the algorithm cared about how
-        the points were defined—it only wanted points that were defined in counterclockwise order.
-        For example, the algorithm would not treat the below squares the same. We had to be sure that all polygons were
+        the points were defined — it only wanted points that were defined in counterclockwise order, because checking whether an angle
+        is convex or reflex relies on the cross product of the two vectors making up the ear being negative. 
+        For example, the algorithm would not treat the below squares the same – one would have a negative cross product and the other would have a positive cross product. We had to be sure that all polygons were
         inputted accordingly.
     <div class="images">
         <img src="images/square1.png" alt="square 1">
@@ -112,7 +116,7 @@
 
     <p>
         <strong>Centering Polygons</strong>:<br>
-        The position of the preset polygons are absolute, so some of the polygons appear offcenter.
+        The position of the preset polygons are absolute, so some of the polygons appear offcenter. It proved to be more difficult than anticipated to calculate the correct transformations to get the polygon, and the tangram pieces, to appear on screen nicely.
     </p>
 
     <p>
@@ -124,9 +128,6 @@
     <hr>
 
     <h2>References</h2>
-    <p>
-        Resources referenced:
-    </p>
     <ul>
         <li>Mark de Berg's Computational Geometry: Algorithms and Applications (2008)</li>
         <li><a href="https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf">Triangulation by
