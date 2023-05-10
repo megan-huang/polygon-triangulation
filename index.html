@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Polygon Triangulation</title>
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <script src="vis-new.js" defer></script>
-  </head>
-  <body>
-    <div id="root">
-      <div id="header" class="all-text">
-          <h1>Tangriangulate!</h1>
-          <h4>By Emi Eliason, Megan Huang and Sarah Wu</h4>
-      </div>
 
-      <div id="buttons" class="all-text">
-        <!-- <button>Start Drawing Polygon</button>
-        <button>End Drawing Polygon</button> -->
-        <button onclick="clearSVG()">Switch Polygon</button>
-        <button onclick="visualizeTriangulation(true)">Animate Triangulation</button>
-        <button onclick="visualizeTriangulation(false)">Triangulate</button>
-        <button onclick="scatter()">Tangramify!</button>
-        <input type="checkbox" id="controls" onclick="toggleCheckbox()"> <label for="controls">Hide Controls</label><br>
-      </div>
+<head>
+  <meta charset="utf-8">
+  <title>Polygon Triangulation</title>
+  <link rel="stylesheet" href="style.css" type="text/css">
+  <script src="vis-new.js" defer></script>
+</head>
 
-        <p class="all-text">This website visualizes polygon triangulation!
-        <a class="all-text" href="about.html">Learn more about the algorithm and the development of this project</a> </p>
-
-        <div id="guides">
-          <div id="reflex" class="hidden">This angle is reflex!</div>
-          <div id="point-in-triangle" class="hidden">This triangle has a point in it!</div>
-        </div>
-
-        <svg id="canvas" xmlns="http://www.w3.org/2000/svg" fill="white" onload="makeDraggable(evt)" transform="matrix(1, 0, 0, -1, 0, 0)"">
-            <!-- <rect width="900" height="500" fill="white" transform="matrix(1, 0, 0, -1, 0, 500)"/> -->
-        </svg>
+<body>
+  <div id="root">
+    <div id="header" class="all-text">
+      <h1>Tangriangulate!</h1>
+      <h4>By Emi Eliason, Megan Huang and Sarah Wu</h4>
     </div>
-  </body>
+    <div id="buttons" class="all-text">
+      <button onclick="clearSVG()">Switch Polygon</button>
+      <button onclick="visualizeTriangulation(true)">Animate Triangulation</button>
+      <button onclick="visualizeTriangulation(false)">Triangulate</button>
+      <button onclick="scatter()">Tangramify!</button>
+    </div>
+    <div>
+      <input type="checkbox" id="controls" onclick="toggleCheckbox()"> <label for="controls">Hide Controls</label>
+    </div>
+    <p class="all-text">This website visualizes polygon triangulation!
+      <a class="all-text" href="about.html">Learn more about the algorithm and the development of this project</a>
+    </p>
+
+    <div id="guides">
+      <div id="reflex" class="hidden">This angle is reflex!</div>
+      <div id="point-in-triangle" class="hidden">This triangle has a point in it!</div>
+    </div>
+
+    <svg id="canvas" xmlns="http://www.w3.org/2000/svg" fill="white" onload="makeDraggable(evt)"
+      transform="matrix(1, 0, 0, -1, 0, 0)"">
+    </svg>
+  </div>
+</body>
+
 </html>

@@ -32,6 +32,12 @@ body {
     width: 50svw;
 }
 
+/* #checkbox {
+    position: relative;
+    display: flex;
+    justify-content: right;
+} */
+
 /* subpage formatting ---------*/
 #header-format {
     display: flex;
